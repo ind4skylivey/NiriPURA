@@ -56,14 +56,11 @@
 
 ### Noctalia Workspace Icons
 
-Widget config at `~/.local/state/noctalia/settings.toml`:
+Workspace widget prefs live in Noctalia UI / `~/.local/state/noctalia/settings.toml`.
+A manual snapshot is kept at `noctalia/widget-workspaces.golden.toml` (reference only — not auto-applied).
 
-```toml
-[widget.workspaces]
-font_family = "MesloLGL Nerd Font"   # MUST be Nerd Font for PUA glyphs
-label_source = "name"                # shows workspace name (with glyph)
-max_label_chars = 0                  # 0 = full name; 1 = icon only (DWM look)
-```
+At login, `scripts/restore-named-workspaces.sh` only moves named workspaces to DP-1.
+It does **not** change hide/size/label widget flags — those stay as you set them in Noctalia.
 
 > **Gotcha**: If `font_family` is not a Nerd Font, icons render invisible — you only see the text part of the name.
 
@@ -216,7 +213,8 @@ Press `Mod+Shift+Slash` to show the hotkey overlay. Press `Mod+Shift+W` to open 
 └── README.md              # This file
 
 ~/.local/state/noctalia/
-└── settings.toml          # Noctalia runtime settings (bar, widgets)
+├── settings.toml          # Noctalia runtime settings (bar, widgets) — LIVE state
+└── (repo) noctalia/widget-workspaces.golden.toml  # manual snapshot (not auto-applied)
 ```
 
 ---
@@ -237,7 +235,9 @@ Press `Mod+Shift+Slash` to show the hotkey overlay. Press `Mod+Shift+W` to open 
 
 | Issue | Solution |
 |-------|----------|
-| Workspace icons show as letters only | Set `font_family = "MesloLGL Nerd Font"` in `[widget.workspaces]` |
+| Workspace icons show as letters only | Set `font_family = "MesloLGL Nerd Font"` in `[widget.workspaces]` (Noctalia settings) |
+| Named workspaces on wrong monitor after login | Autostart runs `scripts/restore-named-workspaces.sh` (pins named WSs to DP-1 only) |
+| Widget hide/size/label prefs | Owned in Noctalia UI — restore script does **not** overwrite them |
 | Workspace order wrong after config reload | Hot-reload inserts named workspaces at top (reverse order). Fix: `niri msg action move-workspace-to-index --reference "name" N` |
 | Window not on expected workspace | Check `open-on-workspace` in window-rules.kdl — name must match exactly |
 | Hotkey overlay shows at startup | Fixed with `skip-at-startup` in config |
