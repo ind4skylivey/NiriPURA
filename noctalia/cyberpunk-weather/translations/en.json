@@ -1,0 +1,11 @@
+{
+  "plugin.name": "Cyberpunk Weather",
+  "plugin.description": "Cyberpunk-styled weather widget with neon aesthetics.",
+  "settings.api_key.label": "OpenWeatherMap API Key",
+  "settings.api_key.description": "Get a free API key from openweathermap.org",
+  "settings.city.label": "City",
+  "settings.city.description": "City name for weather lookup",
+  "settings.units.label": "Units",
+  "settings.units.metric": "Metric (°C, m/s)",
+  "settings.units.imperial": "Imperial (°F, mph)"
+}

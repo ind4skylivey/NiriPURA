@@ -1,0 +1,17 @@
+// ============================================================
+// modules/workspaces.kdl
+// Named workspaces with Nerd Font icons (primary monitor only).
+// Dynamic workspaces on other monitors (numbered, same keybinds).
+// Mod+1..10 focuses workspace N on the CURRENT output.
+// ============================================================
+
+workspace " term"
+workspace " web"
+workspace "󰳆 dev"
+workspace " docs"
+workspace " conf"
+workspace " s1b"
+workspace " sec"
+workspace " chill"
+workspace " games"
+workspace " wm"

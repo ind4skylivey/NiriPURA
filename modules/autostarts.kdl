@@ -1,0 +1,29 @@
+// ============================================================
+// modules/autostarts.kdl
+// NIRI PURA + Noctalia v5 session. No Waybar, Dunst, Wofi, or Rofi.
+// Noctalia handles: bar, notifications, launcher, control center,
+// lockscreen, wallpaper picker. Replaces Waybar + Dunst + Wofi/Rofi entirely.
+// ============================================================
+
+// Wayland session bootstrap
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
+spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
+
+// Polkit agent
+spawn-at-startup "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1"
+
+// Noctalia -- full shell: bar, notifications, launcher, control center,
+// lockscreen, wallpaper picker. Replaces Waybar + Dunst + Wofi/Rofi entirely.
+spawn-sh-at-startup "noctalia"
+
+// Wallpaper daemon
+spawn-sh-at-startup "swww-daemon"
+
+// Slow services - start in background after session is ready
+// Using spawn-sh-at-startup with & for background process
+spawn-sh-at-startup "sleep 10 && (openrgb --startminimized &)"
+spawn-sh-at-startup "emacs --daemon &"
+spawn-sh-at-startup "solaar -w hide &"
+
+// NOTE: waybar, dunst, rofi, and wofi are NOT started in this session.
+// They remain only in your DWM (X11) session, untouched.

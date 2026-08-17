@@ -1,0 +1,14 @@
+id = "il1v3y/cyberpunk-messages"
+name = "Cyberpunk Messages"
+version = "1.0.0"
+plugin_api = 3
+author = "il1v3y"
+license = "MIT"
+tags = ["messages", "cyberpunk", "hacker"]
+icon = "terminal"
+description = "Cyberpunk hacker-style messages widget with rotating quotes and personal tagline."
+
+# Desktop widget
+[[desktop_widget]]
+id = "messages-cyber"
+entry = "desktop.luau"

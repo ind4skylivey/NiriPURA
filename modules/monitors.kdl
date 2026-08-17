@@ -1,0 +1,37 @@
+// ============================================================
+// modules/monitors.kdl
+//
+// Physical layout:
+//
+//                 [Samsung 1920x1080]
+//   [ASUS portrait] [LG 1920x1080 180Hz]
+//     (reading)       (primary)
+//
+// ASUS (DP-2):    rotated 90° -> 1080x1920 logical, left
+// LG (DP-1):      center, primary, 180Hz
+// Samsung (HDMI): above LG
+// ============================================================
+
+output "DP-2" {
+    mode "1920x1080@60.000"
+    transform "90"
+    position x=0 y=0
+    scale 1
+}
+
+output "DP-1" {
+    mode "1920x1080@179.961"
+    position x=1080 y=1080
+    scale 1
+}
+
+output "HDMI-A-1" {
+    mode "1920x1080@60.000"
+    position x=1080 y=0
+    scale 1
+}
+
+// Physical reference:
+// ASUS VP228    -> 480x270mm (portrait: 270x480)
+// LG UltraGear  -> 530x300mm
+// Samsung       -> 700x390mm
