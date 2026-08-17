@@ -1,0 +1,16 @@
+# Snapshot of YOUR Noctalia [widget.workspaces] prefs (reference only).
+# DO NOT auto-overwrite live settings from this file.
+# User choices (do not "fix" these):
+#   hide_when_empty = true
+#   max_label_chars = 6
+# scripts/restore-named-workspaces.sh only pins named workspaces to DP-1 —
+# it does NOT touch widget hide/size/label flags.
+
+[widget.workspaces]
+font_family = "MesloLGL Nerd Font"
+font_weight = 400
+hide_when_empty = true
+label_source = "name"
+labels_only_when_occupied = false
+max_label_chars = 6
+scroll_repeat = "gesture"

@@ -1,17 +1,35 @@
 // ============================================================
 // modules/workspaces.kdl
-// Named workspaces with Nerd Font icons (primary monitor only).
-// Dynamic workspaces on other monitors (numbered, same keybinds).
-// Mod+1..10 focuses workspace N on the CURRENT output.
-// ============================================================
+// Named workspaces with Nerd Font icons on LG (DP-1).
+// ====================================
 
-workspace " term"
-workspace " web"
-workspace "󰳆 dev"
-workspace " docs"
-workspace " conf"
-workspace " s1b"
-workspace " sec"
-workspace " chill"
-workspace " games"
-workspace " wm"
+workspace " term" {
+    open-on-output "DP-1"
+}
+workspace " web" {
+    open-on-output "DP-1"
+}
+workspace "󰳆 dev" {
+    open-on-output "DP-1"
+}
+workspace " docs" {
+    open-on-output "DP-1"
+}
+workspace " conf" {
+    open-on-output "DP-1"
+}
+workspace " s1b" {
+    open-on-output "DP-1"
+}
+workspace " sec" {
+    open-on-output "DP-1"
+}
+workspace " chill" {
+    open-on-output "DP-1"
+}
+workspace " games" {
+    open-on-output "DP-1"
+}
+workspace " wm" {
+    open-on-output "DP-1"
+}

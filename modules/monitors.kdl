@@ -3,13 +3,12 @@
 //
 // Physical layout:
 //
-//                 [Samsung 1920x1080]
-//   [ASUS portrait] [LG 1920x1080 180Hz]
-//     (reading)       (primary)
+//                 [Top 1920x1080]
+//   [Portrait left] [Center 1920x1080 180Hz PRIMARY]
 //
-// ASUS (DP-2):    rotated 90° -> 1080x1920 logical, left
-// LG (DP-1):      center, primary, 180Hz
-// Samsung (HDMI): above LG
+// DP-1 (center primary): 1920x1080@180Hz
+// DP-2 (left portrait):  1920x1080@60Hz, transform 90°
+// HDMI-A-1 (above):      1920x1080@60Hz
 // ============================================================
 
 output "DP-2" {
@@ -30,8 +29,3 @@ output "HDMI-A-1" {
     position x=1080 y=0
     scale 1
 }
-
-// Physical reference:
-// ASUS VP228    -> 480x270mm (portrait: 270x480)
-// LG UltraGear  -> 530x300mm
-// Samsung       -> 700x390mm
