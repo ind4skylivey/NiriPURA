@@ -98,6 +98,12 @@ Press `Mod+Shift+Slash` to show the hotkey overlay. Press `Mod+Shift+W` to open 
 ║  Mod+Shift+Z    🛡  OWASP ZAP                                                ║
 ║  Mod+O          🔑  KeePassXC                                                ║
 ║  Mod+Z          🎯  Wofi (quick launcher)                                   ║
+║  Mod+Space      🚀  Fuzzel (main launcher, glassmorphism)                  ║
+║  Mod+A          ☰  Command palette (fz master menu)                        ║
+║  Mod+Shift+S    🔎  Web search (fz-search)                                 ║
+║  Mod+Shift+B    📋  Clipboard history (fz-clip)                            ║
+║  Mod+Shift+V    🪟  Window switcher (fz-windows)                           ║
+║  Mod+Shift+N    🎛   Niri actions menu (fz-niri)                           ║
 ║                                                                              ║
 ║  WINDOW/COLUMN NAVIGATION — vim-style                                       ║
 ║  ──────────────────────────────────────────────────────────────────────────  ║
@@ -192,6 +198,43 @@ Press `Mod+Shift+Slash` to show the hotkey overlay. Press `Mod+Shift+W` to open 
 
 ---
 
+## Fuzzel Launcher & Scripts
+
+**Fuzzel** (`Mod+Space`) is the main app launcher — compact cyberpunk red team styling with glassmorphism blur (background layer-rule in `layer-rules.kdl` applies Niri blur behind the menu).
+
+### Scripts (`~/.local/bin/fz-*`)
+
+| Script | Keybind | What it does |
+|--------|---------|--------------|
+| `fz` | `Mod+A` | **Master command palette** — Raycast-style hub that dispatches to all submenus below |
+| `fz-search` | `Mod+Shift+S` | Web search — pick engine (Google/DuckDuckGo/GitHub/YouTube/Reddit/Wikipedia/AUR/Steam/man), type query, opens in zen-browser |
+| `fz-calc` | — | Calculator — type expression, live result via `bc -l`, Enter copies result |
+| `fz-run` | — | Run command — fuzzy-search zsh history + 5500+ PATH executables, runs in kitty |
+| `fz-clip` | `Mod+Shift+B` | Clipboard history (daemon `--watch` captures copies; `--clear` wipes). Paste with Enter, clear with `Mod+Backspace` |
+| `fz-windows` | `Mod+Shift+V` | Window switcher — parses `niri msg windows`, fuzzy-search, focus selected |
+| `fz-niri` | `Mod+Shift+N` | Niri actions menu (14 actions: float, fullscreen, screenshot, layouts, etc.) |
+| `fz-pass` | — | KeePassXC password search — `--password` mode for master key, copies password (auto-clears after 15s). Needs `KEEPASS_DB` or path arg |
+| `fz-ssh` | — | SSH host picker — parses `~/.ssh/config` aliases, connects in kitty |
+| `fz-notes` | — | Markdown notes — lists/creates notes in `~/Notes`, opens in Emacs |
+| `fz-power` | — | Power menu (lock, suspend, reboot, shutdown) — run manually or add a keybind |
+| `fz-emoji` | — | Emoji picker (copies emoji, exits) — run manually or add a keybind |
+
+### Key design details
+
+- **dmenu mode**: scripts pipe options into `fuzzel --dmenu` (mode=text, `exit-immediately-if-empty`).
+- **Compact layout**: `width=55`, `lines=10`, `line-height=26` — intentionally NOT big.
+- **Cyberpunk red team palette**: green base (`#9ab89a`) + red/purple accents (`#ff2d78` prompt/selection-match, `#d04dff` match, `#00ff41` border).
+- **Message banner**: `// the wired 🌐` shows below the prompt (message-mode=expand).
+- **Glassmorphism**: `layer-rules.kdl` sets `blur true; xray true` for namespace `launcher`; background `0a0f0acc` + border radius 8 keeps corners clean.
+
+### Gotchas (learned the hard way)
+
+1. **Stale lock file**: Fuzzel writes `/run/user/$(id -u)/fuzzel-wayland-1.lock` and refuses to start if it exists ("fuzzel already running?"). All `fz-*` scripts `rm -f` it before launching.
+2. **Keybind conflicts are silent**: `Mod+Shift+C` was already `center-column` — the new binding simply didn't fire. Always check existing binds before adding.
+3. **Niri spawn PATH**: scripts need absolute paths in keybinds (`spawn "/home/il1v3y/.local/bin/fz-clip"`) — Niri's environment may not include `~/.local/bin`.
+
+---
+
 ## Files
 
 ```
@@ -212,6 +255,20 @@ Press `Mod+Shift+Slash` to show the hotkey overlay. Press `Mod+Shift+W` to open 
 ├── noctalia.kdl           # Noctalia theme overrides (colors)
 └── README.md              # This file
 
+~/.local/bin/
+├── fz                    # Master command palette (Mod+A)
+├── fz-search             # Web search engine picker (Mod+Shift+S)
+├── fz-calc               # Calculator (bc -l)
+├── fz-run                # Command runner (zsh history + PATH)
+├── fz-clip               # Clipboard history (daemon --watch)
+├── fz-windows            # Window switcher
+├── fz-niri               # Niri actions menu
+├── fz-pass               # KeePassXC password search
+├── fz-ssh                # SSH host picker
+├── fz-notes              # Markdown notes manager
+├── fz-power              # Power menu
+└── fz-emoji              # Emoji picker
+
 ~/.local/state/noctalia/
 ├── settings.toml          # Noctalia runtime settings (bar, widgets) — LIVE state
 └── (repo) noctalia/widget-workspaces.golden.toml  # manual snapshot (not auto-applied)
@@ -228,6 +285,7 @@ Press `Mod+Shift+Slash` to show the hotkey overlay. Press `Mod+Shift+W` to open 
 5. **Video wallpaper** requires `mpvpaper`. Toggle with `Mod+Alt+W`.
 6. **Night light** (`F11`) sets 3500K. `Shift+F11` disables.
 7. **Output profile** (`Mod+Alt+X`) toggles gaming/work modes.
+8. **Fuzzel glassmorphism** needs the blur layer-rule in `layer-rules.kdl` — match namespace `launcher`, `xray true` for per-window blur.
 
 ---
 
@@ -242,6 +300,7 @@ Press `Mod+Shift+Slash` to show the hotkey overlay. Press `Mod+Shift+W` to open 
 | Window not on expected workspace | Check `open-on-workspace` in window-rules.kdl — name must match exactly |
 | Hotkey overlay shows at startup | Fixed with `skip-at-startup` in config |
 | Video wallpaper not working | Check `mpvpaper` is installed |
+| fz-* script does nothing on keybind | Check for stale fuzzel lock (`ls /run/user/$(id -u)/fuzzel-wayland-1.lock`) — scripts clean it, but check keybind uses absolute path; verify no Niri keybind conflict (`grep -oE "Mod\+Shift\+[A-Za-z]" modules/keybinds.kdl \| sort -u`) |
 | Slow session startup | Services like emacs/openrgb start with 5-10s delay |
 
 ---

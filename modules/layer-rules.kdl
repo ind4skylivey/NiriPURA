@@ -26,3 +26,12 @@ layer-rule {
         xray false
     }
 }
+
+// Blur on Fuzzel launcher (glassmorphism effect)
+layer-rule {
+    match namespace="launcher"
+    background-effect {
+        blur true
+        xray true
+    }
+}

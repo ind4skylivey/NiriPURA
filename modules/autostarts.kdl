@@ -30,5 +30,11 @@ spawn-sh-at-startup "sleep 10 && (openrgb --startminimized &)"
 spawn-sh-at-startup "emacs --daemon &"
 spawn-sh-at-startup "solaar -w hide &"
 
+// Fuzzel clipboard history daemon (fz-clip)
+spawn-sh-at-startup "/home/il1v3y/.local/bin/fz-clip --watch &"
+
+// Auto-lock after 5 minutes of inactivity
+spawn-sh-at-startup "swayidle -w timeout 300 'noctalia msg session lock' resume 'notify-send \"Welcome back\"' &"
+
 // NOTE: waybar, dunst, rofi, and wofi are NOT started in this session.
 // They remain only in your DWM (X11) session, untouched.
