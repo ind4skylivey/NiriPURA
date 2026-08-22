@@ -28,6 +28,14 @@ binds {
     Mod+Shift+Z hotkey-overlay-title="<b><span foreground='#ffb59f'>🛡</span> ZAP</b>" { spawn "zaproxy"; }
     Mod+O hotkey-overlay-title="<b><span foreground='#ffb59f'>🔑</span> KeePass</b>" { spawn "keepassxc"; }
     Mod+Z hotkey-overlay-title="<b><span foreground='#ffb59f'>🎯</span> Wofi</b>" { spawn "wofi" "--show" "drun"; }
+    Mod+Space hotkey-overlay-title="<b><span foreground='#5a9a5a'>🚀</span> Fuzzel</b>" { spawn "fuzzel"; }
+
+    // --- Fuzzel scripts (s1bgr0up.inc) ---
+    Mod+A hotkey-overlay-title="<b><span foreground='#ff2d78'>☰</span> Command Palette</b>" { spawn "/home/il1v3y/.local/bin/fz"; }
+    Mod+Shift+S hotkey-overlay-title="<b><span foreground='#ff2d78'>🔎</span> Web Search</b>" { spawn "/home/il1v3y/.local/bin/fz-search"; }
+    Mod+Shift+B hotkey-overlay-title="<b><span foreground='#ff2d78'>📋</span> Clipboard</b>" { spawn "/home/il1v3y/.local/bin/fz-clip"; }
+    Mod+Shift+V hotkey-overlay-title="<b><span foreground='#d04dff'>🪟</span> Windows</b>" { spawn "/home/il1v3y/.local/bin/fz-windows"; }
+    Mod+Shift+N hotkey-overlay-title="<b><span foreground='#00ff41'>🎛</span> Niri Actions</b>" { spawn "/home/il1v3y/.local/bin/fz-niri"; }
 
     // --- Screenshots ---
     Mod+P hotkey-overlay-title="<b><span foreground='#ffb59f'>📷</span> Screenshot</b>" { screenshot; }
