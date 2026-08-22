@@ -126,6 +126,8 @@ Press `Mod+Shift+Slash` to show the hotkey overlay. Press `Mod+Shift+W` to open 
 ║  Mod+Shift+M    ⛶  Fullscreen                                               ║
 ║  Mod+M          ⛶  Maximize to edges                                         ║
 ║  Mod+Shift+C    ⊜  Center column                                             ║
+║  Mod+Alt+C      ⚖  Uncenter column (70% width)                               ║
+║  Mod+Ctrl+C     ⊜  Center all visible columns                                ║
 ║  Mod+R          ⊡  Cycle column width presets                                ║
 ║  Mod+T          ⊞  Toggle tabbed display (tabs in column)                    ║
 ║  Mod+Minus/=    ⇖/⇗  Resize column narrower/wider                            ║
@@ -235,6 +237,75 @@ Press `Mod+Shift+Slash` to show the hotkey overlay. Press `Mod+Shift+W` to open 
 
 ---
 
+## Column Centering & Positioning
+
+Niri provides flexible column positioning with three distinct modes: centered (full-width), uncentered (reduced width), and floating (manual drag).
+
+### Keybinds
+
+| Keybind | Action | Description |
+|---------|--------|-------------|
+| `Mod+Shift+C` | `center-column` | Centers the focused column at full workspace width |
+| `Mod+Alt+C` | `niri-toggle-center` | Reduces column width to 70% (uncenters) |
+| `Mod+Ctrl+C` | `center-visible-columns` | Centers all visible columns |
+| `Mod+Shift+Ctrl+V` | `toggle-window-floating` | Converts window to floating mode for manual positioning |
+| `Mod+Ctrl+V` | `switch-focus-between-floating-and-tiling` | Switches focus between floating and tiling windows |
+
+### Workflow
+
+**Single window:**
+1. Open window → centered by default (full width)
+2. `Mod+Alt+C` → reduces to 70% width (uncentered)
+3. `Mod+Shift+C` → back to full width (centered)
+
+**Multiple windows:**
+1. Open second window → both columns visible, tiled layout
+2. `Mod+Shift+C` → centers the focused column
+3. `Mod+Alt+C` → uncenters (reduces width to 70%)
+4. `Mod+Ctrl+Left/Right` → reorder columns
+
+**Manual positioning (floating mode):**
+1. `Mod+Shift+Ctrl+V` → convert window to floating
+2. Drag with mouse to desired position
+3. `Mod+Ctrl+V` → return to tiling mode
+
+### Script: `niri-toggle-center`
+
+Location: `~/.local/bin/niri-toggle-center`
+
+```bash
+#!/bin/bash
+# Uncenter column by reducing its width
+# When a column is narrower than the workspace, Niri positions it to the left
+
+set -euo pipefail
+
+# Reduce column width to 70% (positions it to the left)
+niri msg action set-column-width "70%"
+```
+
+### Configuration
+
+In `config.kdl`, the `always-center-single-column` option is **disabled**:
+
+```kdl
+layout {
+    gaps 7
+    center-focused-column "never"
+    // always-center-single-column  // Disabled: windows stay at their column position
+}
+```
+
+This means single windows stay at their natural column position instead of being forced to center. Use `Mod+Shift+C` to center manually when desired.
+
+### Notes
+
+- **Uncenter with 1 window**: `Mod+Alt+C` reduces width to 70%, positioning the column to the left side of the workspace.
+- **Uncenter with 2+ windows**: Same behavior, but you can also use `Mod+Ctrl+Left/Right` to reorder columns.
+- **Floating mode**: Use when you need precise manual positioning (e.g., for screenshots, presentations, or specific layouts).
+
+---
+
 ## Files
 
 ```
@@ -267,7 +338,8 @@ Press `Mod+Shift+Slash` to show the hotkey overlay. Press `Mod+Shift+W` to open 
 ├── fz-ssh                # SSH host picker
 ├── fz-notes              # Markdown notes manager
 ├── fz-power              # Power menu
-└── fz-emoji              # Emoji picker
+├── fz-emoji              # Emoji picker
+└── niri-toggle-center    # Uncenter column (Mod+Alt+C)
 
 ~/.local/state/noctalia/
 ├── settings.toml          # Noctalia runtime settings (bar, widgets) — LIVE state
