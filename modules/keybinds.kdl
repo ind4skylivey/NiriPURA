@@ -156,6 +156,7 @@ binds {
     Mod+Ctrl+F hotkey-overlay-title=null { expand-column-to-available-width; }
     Mod+Shift+C hotkey-overlay-title=null { center-column; }
     Mod+Ctrl+C hotkey-overlay-title=null { center-visible-columns; }
+    Mod+Alt+C hotkey-overlay-title="<b><span foreground='#ffb59f'>⚖</span> Uncenter</b>" { spawn "/home/il1v3y/.local/bin/niri-toggle-center"; }
 
     // --- Floating ---
     Mod+Shift+Ctrl+V hotkey-overlay-title=null { toggle-window-floating; }
