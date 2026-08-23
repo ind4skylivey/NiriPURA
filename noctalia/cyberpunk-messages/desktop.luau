@@ -38,8 +38,10 @@ local MESSAGES = {
 local CURRENT_MESSAGE = 1
 local DISPLAY_TEXT = ""
 local CHAR_INDEX = 0
-local LAST_SWITCH = 0
-local SWITCH_INTERVAL = 3  -- seconds between messages
+local LAST_SWITCH_TIME = 0   -- os.time() of last message switch
+local LAST_CHAR_CLOCK = 0    -- os.clock() of last char typed
+local SWITCH_INTERVAL = 4    -- seconds between messages
+local CHARS_PER_SECOND = 25  -- typewriter speed
 
 --------------------------------------------------------------------------------
 -- Personal Tagline
@@ -76,10 +78,13 @@ end
 -- Typewriter Effect
 --------------------------------------------------------------------------------
 local function updateTypewriter()
-    local now = os.time()
+    local nowTime = os.time()
+    local nowClock = os.clock()
 
-    if now ~= LAST_SWITCH then
-        LAST_SWITCH = now
+    -- Message switch: every SWITCH_INTERVAL seconds
+    if nowTime - LAST_SWITCH_TIME >= SWITCH_INTERVAL then
+        LAST_SWITCH_TIME = nowTime
+        LAST_CHAR_CLOCK = nowClock
         CHAR_INDEX = 0
         CURRENT_MESSAGE = CURRENT_MESSAGE + 1
         if CURRENT_MESSAGE > #MESSAGES then
@@ -88,9 +93,15 @@ local function updateTypewriter()
     end
 
     local fullMsg = MESSAGES[CURRENT_MESSAGE]
+
+    -- Typewriter: CHARS_PER_SECOND chars per second, ~2-3 per 100ms tick
+    local charInterval = 1 / CHARS_PER_SECOND
     if CHAR_INDEX < #fullMsg then
-        CHAR_INDEX = CHAR_INDEX + 1
-        DISPLAY_TEXT = fullMsg:sub(1, CHAR_INDEX) .. "_"
+        if nowClock - LAST_CHAR_CLOCK >= charInterval then
+            LAST_CHAR_CLOCK = nowClock
+            CHAR_INDEX = CHAR_INDEX + 1
+            DISPLAY_TEXT = fullMsg:sub(1, CHAR_INDEX) .. "▊"  -- ▊ = blinking cursor
+        end
     else
         DISPLAY_TEXT = fullMsg
     end
@@ -161,9 +172,8 @@ local function render()
             spacer(10),
 
             -- Tagline con estilo
-            ui.box({
-                width = nil,
-                opacity = 0.1,
+            ui.column({
+                align = "center",
                 padding = 12,
             }, {
                 lbl(TAGLINE, 22, C.text, true),
@@ -196,3 +206,6 @@ function update()
     noctalia.setUpdateInterval(100)
     render()
 end
+
+-- Initial kickoff
+update()
