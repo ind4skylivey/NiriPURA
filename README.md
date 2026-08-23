@@ -12,9 +12,11 @@
 
 ## Preview
 
-![Desktop overview](screenshots/Screenshot%20from%202026-08-17%2006-05-30.png)
-
-![Workspaces and widgets](screenshots/Screenshot%20from%202026-08-14%2005-40-04.png)
+<p align="center">
+  <img src="screenshots/screen1.png" alt="Niri PURA desktop" width="420">
+  &nbsp;&nbsp;
+  <img src="screenshots/screen2.png" alt="Niri PURA workspaces" width="420">
+</p>
 
 ---
 
