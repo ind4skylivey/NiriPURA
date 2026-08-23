@@ -1,0 +1,83 @@
+// ============================================================
+// ~/.config/niri/config.kdl
+// Niri + Noctara-Dots inspired (peach/coral palette)
+// S1BGroup / Livey Noir
+// ============================================================
+
+include "./modules/input.kdl"
+include "./modules/monitors.kdl"
+include "./modules/env.kdl"
+include "./modules/autostarts.kdl"
+include "./modules/animations.kdl"
+include "./modules/decorations.kdl"
+include "./modules/layer-rules.kdl"
+include "./modules/keybinds.kdl"
+include "./modules/workspaces.kdl"
+include "./modules/window-rules.kdl"
+
+// NOTE: Layout must stay in root config.kdl.
+// Moving it to a module via "include" breaks border/focus-ring rendering.
+
+layout {
+    gaps 7
+
+    center-focused-column "never"
+    // always-center-single-column  // Disabled: windows stay at their column position
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    default-column-width { proportion 0.55; }
+
+    focus-ring {
+        width 4
+        active-color   "#7fc8ff"
+        inactive-color "#505050"
+    }
+
+    border {
+        width 2
+
+        active-color   "#ffb59f"
+        inactive-color "#1c110e"
+        urgent-color   "#ffb4ab"
+    }
+
+    tab-indicator {
+        active-color   "#ffb59f"
+        inactive-color "#b84622"
+        urgent-color   "#ffb4ab"
+    }
+
+    insert-hint {
+        color "#ffb59f80"
+    }
+
+    // shadow disabled for performance
+    // shadow {
+    //     on
+    //     softness 30
+    //     spread 5
+    //     offset x=0 y=5
+    //     color "#000000aa"
+    // }
+
+    struts {
+    }
+}
+
+// Cursor configuration
+cursor {
+    xcursor-theme "WhiteSur-cursors"
+    xcursor-size 24
+}
+
+// Hotkey overlay configuration
+hotkey-overlay {
+    skip-at-startup
+}
+
+include "./noctalia.kdl"

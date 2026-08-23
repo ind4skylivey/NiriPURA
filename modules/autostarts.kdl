@@ -1,0 +1,40 @@
+// ============================================================
+// modules/autostarts.kdl
+// NIRI PURA + Noctalia v5 session. No Waybar, Dunst, Wofi, or Rofi.
+// Noctalia handles: bar, notifications, launcher, control center,
+// lockscreen, wallpaper picker. Replaces Waybar + Dunst + Wofi/Rofi entirely.
+// ============================================================
+
+// Wayland session bootstrap
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
+spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
+
+// Polkit agent
+spawn-at-startup "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1"
+
+// Noctalia -- full shell: bar, notifications, launcher, control center,
+// lockscreen, wallpaper picker. Replaces Waybar + Dunst + Wofi/Rofi entirely.
+spawn-sh-at-startup "noctalia"
+
+// Pin named workspaces to primary output (DP-1) after outputs settle.
+// Fixes cold-boot case where they land on a secondary output (e.g. DP-2).
+spawn-sh-at-startup "~/.config/niri/scripts/restore-named-workspaces.sh"
+
+
+// Wallpaper daemon
+spawn-sh-at-startup "swww-daemon"
+
+// Slow services - start in background after session is ready
+// Using spawn-sh-at-startup with & for background process
+spawn-sh-at-startup "sleep 10 && (openrgb --startminimized &)"
+spawn-sh-at-startup "emacs --daemon &"
+spawn-sh-at-startup "solaar -w hide &"
+
+// Fuzzel clipboard history daemon (fz-clip)
+spawn-sh-at-startup "/home/il1v3y/.local/bin/fz-clip --watch &"
+
+// Auto-lock after 5 minutes of inactivity
+spawn-sh-at-startup "swayidle -w timeout 300 'noctalia msg session lock' resume 'notify-send \"Welcome back\"' &"
+
+// NOTE: waybar, dunst, rofi, and wofi are NOT started in this session.
+// They remain only in your DWM (X11) session, untouched.
