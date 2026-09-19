@@ -8,7 +8,7 @@ binds {
     Mod+Shift+Slash hotkey-overlay-title="<b><span foreground='#ffb59f'>⌨</span> Keybindings</b>" { show-hotkey-overlay; }
 
     // --- Noctalia: full shell (bar/notif/launcher/lock/etc) ---
-    Mod+L      hotkey-overlay-title="<b><span foreground='#ffb59f'>🔒</span> Lock</b>" { spawn-sh "noctalia msg session lock"; }
+    Mod+L      hotkey-overlay-title="<b><span foreground='#ffb59f'>🔒</span> Lock</b>" { spawn-sh "$HOME/.config/niri/scripts/lockscreen-random"; }
     Mod+Comma  hotkey-overlay-title="<b><span foreground='#ffb59f'>🖼</span> Wallpaper</b>" { spawn-sh "noctalia msg panel-toggle wallpaper"; }
     Mod+Period hotkey-overlay-title="<b><span foreground='#ffb59f'>😀</span> Emoji</b>" { spawn-sh "noctalia msg panel-toggle launcher \"/emo \""; }
     Mod+V      hotkey-overlay-title="<b><span foreground='#ffb59f'>📋</span> Clipboard</b>" { spawn-sh "noctalia msg panel-toggle clipboard"; }
@@ -25,6 +25,7 @@ binds {
     Mod+Shift+F hotkey-overlay-title="<b><span foreground='#ffb59f'>🌐</span> Qutebrowser</b>" { spawn "qutebrowser"; }
     Mod+B hotkey-overlay-title="<b><span foreground='#ffb59f'>🦎</span> Zen Browser</b>" { spawn "zen-browser"; }
     Mod+G hotkey-overlay-title="<b><span foreground='#ffb59f'>💀</span> Burpsuite</b>" { spawn "burpsuite"; }
+    Mod+Alt+G hotkey-overlay-title="<b><span foreground='#ffb59f'>🤖</span> Grok Bot</b>" { spawn "grok-bot"; }
     Mod+Shift+Z hotkey-overlay-title="<b><span foreground='#ffb59f'>🛡</span> ZAP</b>" { spawn "zaproxy"; }
     Mod+O hotkey-overlay-title="<b><span foreground='#ffb59f'>🔑</span> KeePass</b>" { spawn "keepassxc"; }
     Mod+Z hotkey-overlay-title="<b><span foreground='#ffb59f'>🎯</span> Wofi</b>" { spawn "wofi" "--show" "drun"; }
@@ -36,6 +37,9 @@ binds {
     Mod+Shift+B hotkey-overlay-title="<b><span foreground='#ff2d78'>📋</span> Clipboard</b>" { spawn "/home/il1v3y/.local/bin/fz-clip"; }
     Mod+Shift+V hotkey-overlay-title="<b><span foreground='#d04dff'>🪟</span> Windows</b>" { spawn "/home/il1v3y/.local/bin/fz-windows"; }
     Mod+Shift+N hotkey-overlay-title="<b><span foreground='#00ff41'>🎛</span> Niri Actions</b>" { spawn "/home/il1v3y/.local/bin/fz-niri"; }
+
+    // --- NiriShift: Deck Mode (SDDM session flip; install: niri-shift repo) ---
+    Mod+Shift+G hotkey-overlay-title="<b><span foreground='#5a9a5a'>🎮</span> Gaming Mode</b>" { spawn-sh "niri-shift-switch-to-gaming"; }
 
     // --- Screenshots ---
     Mod+P hotkey-overlay-title="<b><span foreground='#ffb59f'>📷</span> Screenshot</b>" { screenshot; }

@@ -1,9 +1,10 @@
 // ============================================================
-// ~/.config/niri/config.kdl
-// Niri + Noctara-Dots inspired (peach/coral palette)
-// S1BGroup / Livey Noir
+// File: ~/.config/niri/config.kdl
+// Theme: Niri + Noctara-Dots (Peach/Coral Palette)
+// Organization: S1BGroup / Livey Noir
 // ============================================================
 
+// --- Module Imports ---
 include "./modules/input.kdl"
 include "./modules/monitors.kdl"
 include "./modules/env.kdl"
@@ -15,14 +16,25 @@ include "./modules/keybinds.kdl"
 include "./modules/workspaces.kdl"
 include "./modules/window-rules.kdl"
 
-// NOTE: Layout must stay in root config.kdl.
-// Moving it to a module via "include" breaks border/focus-ring rendering.
+// --- Global Window Policy ---
+// Visual consistency for all managed windows.
+window-rule {
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
 
+// --- Input Behavior ---
+// This block must be separate from layout.
+input {
+    // Allows window focus to switch by moving the cursor.
+    focus-follows-mouse
+}
+
+// --- Layout Configuration ---
 layout {
     gaps 7
 
     center-focused-column "never"
-    // always-center-single-column  // Disabled: windows stay at their column position
 
     preset-column-widths {
         proportion 0.33333
@@ -32,6 +44,7 @@ layout {
 
     default-column-width { proportion 0.55; }
 
+    // --- Theming & Focus Visualization ---
     focus-ring {
         width 4
         active-color   "#7fc8ff"
@@ -40,8 +53,7 @@ layout {
 
     border {
         width 2
-
-        active-color   "#ffb59f"
+        active-color   "#ffb59f" // Primary Coral
         inactive-color "#1c110e"
         urgent-color   "#ffb4ab"
     }
@@ -56,28 +68,21 @@ layout {
         color "#ffb59f80"
     }
 
-    // shadow disabled for performance
-    // shadow {
-    //     on
-    //     softness 30
-    //     spread 5
-    //     offset x=0 y=5
-    //     color "#000000aa"
-    // }
-
     struts {
     }
 }
 
-// Cursor configuration
+// --- Cursor Settings ---
 cursor {
     xcursor-theme "WhiteSur-cursors"
     xcursor-size 24
 }
 
-// Hotkey overlay configuration
+// --- UI Components ---
 hotkey-overlay {
     skip-at-startup
 }
 
-include "./noctalia.kdl"
+// END OF FILE
+
+include "noctalia.kdl"

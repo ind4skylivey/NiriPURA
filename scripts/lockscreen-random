@@ -1,0 +1,19 @@
+#!/bin/bash
+# Lockscreen with random image from ~/Pictures/screenlock
+
+LOCKSCREEN_DIR="$HOME/Pictures/screenlock"
+CURRENT_LOCK="$HOME/.cache/lockscreen-current"
+
+# Pick random image
+RANDOM_IMAGE=$(find "$LOCKSCREEN_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | shuf -n 1)
+
+if [[ -z "$RANDOM_IMAGE" ]]; then
+    echo "No images found in $LOCKSCREEN_DIR"
+    exit 1
+fi
+
+# Copy to fixed location (Noctalia reads this)
+cp "$RANDOM_IMAGE" "$CURRENT_LOCK"
+
+# Lock screen
+noctalia msg session lock
