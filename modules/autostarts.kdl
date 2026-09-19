@@ -8,6 +8,10 @@
 // Wayland session bootstrap
 spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
 spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
+// Restart portal after Wayland env is imported (fixes KDE Connect Remote Input).
+spawn-sh-at-startup "sleep 3 && systemctl --user restart xdg-desktop-portal hypr-kdeconnect-portal"
+// NiriShift: repair xdg-desktop-portal after Gaming Mode round-trip
+spawn-sh-at-startup "niri-shift-portal-recovery"
 
 // Polkit agent
 spawn-at-startup "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1"
