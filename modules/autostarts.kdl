@@ -40,5 +40,8 @@ spawn-sh-at-startup "/home/il1v3y/.local/bin/fz-clip --watch &"
 // Auto-lock after 5 minutes of inactivity
 spawn-sh-at-startup "swayidle -w timeout 300 'noctalia msg session lock' resume 'notify-send \"Welcome back\"' &"
 
+// Night light: gammastep auto cycle for Buenos Aires (6500K day / 3500K night)
+spawn-sh-at-startup "$HOME/.config/niri/scripts/night-light.sh start"
+
 // NOTE: waybar, dunst, rofi, and wofi are NOT started in this session.
 // They remain only in your DWM (X11) session, untouched.
