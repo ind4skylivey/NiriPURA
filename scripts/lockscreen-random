@@ -1,19 +1,18 @@
 #!/bin/bash
-# Lockscreen with random image from ~/Pictures/screenlock
+# Lockscreen con imagen aleatoria de ~/Pictures/lockscreen (Noctalia lee ~/.cache/lockscreen-current)
+# 2026-10-11: la carpeta se llama "lockscreen" (antes apuntaba a "screenlock", que no existe).
+# Si no hay imágenes, igual bloquea (con la última imagen o el fondo por defecto).
 
-LOCKSCREEN_DIR="$HOME/Pictures/screenlock"
+LOCKSCREEN_DIR="$HOME/Pictures/lockscreen"
 CURRENT_LOCK="$HOME/.cache/lockscreen-current"
 
-# Pick random image
-RANDOM_IMAGE=$(find "$LOCKSCREEN_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | shuf -n 1)
+RANDOM_IMAGE=$(find -L "$LOCKSCREEN_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) 2>/dev/null | shuf -n 1)
 
-if [[ -z "$RANDOM_IMAGE" ]]; then
-    echo "No images found in $LOCKSCREEN_DIR"
-    exit 1
+if [[ -n "$RANDOM_IMAGE" ]]; then
+    cp -f "$RANDOM_IMAGE" "$CURRENT_LOCK"
+else
+    echo "Sin imágenes en $LOCKSCREEN_DIR; bloqueo igual" >&2
 fi
 
-# Copy to fixed location (Noctalia reads this)
-cp "$RANDOM_IMAGE" "$CURRENT_LOCK"
-
-# Lock screen
-noctalia msg session lock
+[[ "$1" == "--dry-run" ]] && { echo "imagen: ${RANDOM_IMAGE:-ninguna}"; exit 0; }
+exec noctalia msg session lock
