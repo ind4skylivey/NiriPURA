@@ -1,0 +1,19 @@
+id = "il1v3y/cyberpunk-weather"
+name = "Cyberpunk Weather"
+version = "1.1.0"
+plugin_api = 3
+author = "il1v3y"
+license = "MIT"
+tags = ["weather", "cyberpunk", "thailand", "uk"]
+icon = "cloud"
+description = "Cyberpunk-styled weather widget showing Thailand and UK weather with neon aesthetics. Uses Open-Meteo API (no key needed)."
+
+# Background service to fetch weather
+[[service]]
+id = "weather-fetcher"
+entry = "service.luau"
+
+# Desktop widget
+[[desktop_widget]]
+id = "weather-cyber"
+entry = "desktop.luau"

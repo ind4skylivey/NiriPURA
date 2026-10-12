@@ -1,0 +1,31 @@
+// ============================================================
+// modules/monitors.kdl
+//
+// Physical layout:
+//
+//                 [Top 1920x1080]
+//   [Portrait left] [Center 1920x1080 180Hz PRIMARY]
+//
+// DP-1 (center primary): 1920x1080@180Hz
+// DP-2 (left portrait):  1920x1080@60Hz, transform 90°
+// HDMI-A-1 (above):      1920x1080@60Hz
+// ============================================================
+
+output "DP-2" {
+    mode "1920x1080@60.000"
+    transform "90"
+    position x=0 y=0
+    scale 1
+}
+
+output "DP-1" {
+    mode "1920x1080@179.961"
+    position x=1080 y=1080
+    scale 1
+}
+
+output "HDMI-A-1" {
+    mode "1920x1080@60.000"
+    position x=1080 y=0
+    scale 1
+}

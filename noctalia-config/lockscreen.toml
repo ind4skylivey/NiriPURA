@@ -1,0 +1,7 @@
+# Lockscreen cyberpunk config
+[lockscreen]
+blurred_desktop = false
+blur_intensity = 0.0
+tint_intensity = 0.45
+wallpaper = "/home/il1v3y/.cache/lockscreen-current"
+monitors = ["DP-1"]

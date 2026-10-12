@@ -1,0 +1,19 @@
+id = "il1v3y/cyberpunk-network"
+name = "Cyberpunk Network"
+version = "1.0.0"
+plugin_api = 3
+author = "il1v3y"
+license = "MIT"
+tags = ["network", "cyberpunk", "monitor"]
+icon = "wifi"
+description = "Cyberpunk-styled network monitor showing upload/download speeds and connection status. Uses Open-Meteo API (no key needed)."
+
+# Background service to fetch network stats
+[[service]]
+id = "network-fetcher"
+entry = "service.luau"
+
+# Desktop widget
+[[desktop_widget]]
+id = "network-cyber"
+entry = "desktop.luau"

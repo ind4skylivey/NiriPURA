@@ -1,0 +1,8 @@
+#!/bin/bash
+# Uncenter column by reducing its width
+# When a column is narrower than the workspace, Niri positions it to the left
+
+set -euo pipefail
+
+# Reduce column width to 70% (positions it to the left)
+niri msg action set-column-width "70%"

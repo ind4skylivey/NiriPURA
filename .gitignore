@@ -1,0 +1,18 @@
+# Lyrics files (not part of niri config)
+*.lrc
+
+# Noctalia community plugins (separate git repo)
+noctalia/community-plugins/
+noctalia/official-plugins/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor swap files
+*.swp
+*.swo
+*~
+
+# Playwright MCP artifacts
+.playwright-mcp/
