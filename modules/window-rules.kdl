@@ -70,6 +70,15 @@ window-rule {
     open-fullscreen true
 }
 
+// --- Games launched via Faugus/umu (Proton): fullscreen ---
+// Faugus runs games through umu-run + Proton under XWayland:
+// every game window gets app-id "steam_app_default", so we
+// match on the title. UE titles ship trailing spaces in it.
+window-rule {
+    match app-id=r#"^steam_app_default$"# title=r#"^Runescape: Dragonwilds\s*$"#
+    open-fullscreen true
+}
+
 window-rule {
     match app-id=r#"^dolphin$"#
     match app-id=r#"^Pcmanfm-qt$"#
@@ -170,4 +179,30 @@ window-rule {
         off
     }
     open-floating true
+}
+
+// --- Juegos: mejor estado al jugar (2026-10-11) ---
+// Juegos nativos/Unity eligen el "display 0" = el monitor en x=0,y=0 (DP-2 vertical),
+// asi que los mandamos al workspace "games" (vive en DP-1, 180Hz).
+// Sin opacidad/blur/esquinas/recorte para que niri pueda hacer direct scanout.
+window-rule {
+    match app-id=r#"^valheim\.x86_64$"#
+    match app-id=r#"^steam_app_[0-9]+$"#
+    match app-id=r#"^steam_app_default$"#
+    match app-id=r#"^gamescope$"#
+    open-on-output "DP-1"
+    open-on-workspace " games"
+    opacity 1.0
+    variable-refresh-rate true
+    geometry-corner-radius 0
+    clip-to-geometry false
+    background-effect {
+        blur false
+        xray false
+    }
+}
+
+window-rule {
+    match app-id=r#"^valheim\.x86_64$"#
+    open-fullscreen true
 }
