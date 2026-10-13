@@ -6,8 +6,13 @@
 
 LAT="-34.6"
 LON="-58.38"
-PID_FILE="${XDG_RUNTIME_DIR:-/tmp/night-light-$UID}/night-light.pid"
-mkdir -p "$(dirname "$PID_FILE")" 2>/dev/null || true
+# XDG_RUNTIME_DIR is a private, user-owned directory (0700 by systemd);
+# refuse to fall back to /tmp, where another local user could precreate a symlink
+if [[ -z "${XDG_RUNTIME_DIR:-}" ]]; then
+    echo "night-light: XDG_RUNTIME_DIR is not set; aborting" >&2
+    exit 1
+fi
+PID_FILE="$XDG_RUNTIME_DIR/night-light.pid"
 
 # PID of the gammastep instance started by this session, if it is still alive
 our_pid() {
@@ -16,6 +21,8 @@ our_pid() {
     pid=$(cat "$PID_FILE" 2>/dev/null) || return 1
     [[ "$pid" =~ ^[0-9]+$ ]] || return 1
     kill -0 "$pid" 2>/dev/null || { rm -f "$PID_FILE"; return 1; }
+    # Guard against PID reuse: the live process must still be our gammastep
+    [[ "$(cat /proc/$pid/comm 2>/dev/null)" == "gammastep" ]] || { rm -f "$PID_FILE"; return 1; }
     echo "$pid"
 }
 
