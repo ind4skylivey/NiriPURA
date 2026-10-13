@@ -8,11 +8,15 @@ CURRENT_LOCK="$HOME/.cache/lockscreen-current"
 
 RANDOM_IMAGE=$(find -L "$LOCKSCREEN_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) 2>/dev/null | shuf -n 1)
 
+# Preview must not touch the saved image: check before copying
+if [[ "$1" == "--dry-run" ]]; then
+    echo "imagen: ${RANDOM_IMAGE:-ninguna}"
+    exit 0
+fi
+
 if [[ -n "$RANDOM_IMAGE" ]]; then
     cp -f "$RANDOM_IMAGE" "$CURRENT_LOCK"
 else
     echo "Sin imágenes en $LOCKSCREEN_DIR; bloqueo igual" >&2
 fi
-
-[[ "$1" == "--dry-run" ]] && { echo "imagen: ${RANDOM_IMAGE:-ninguna}"; exit 0; }
 exec noctalia msg session lock
