@@ -1,7 +1,7 @@
 // ============================================================
 // modules/keybinds.kdl
 // NIRI PURA + Noctalia v5 session. Launcher/lock/panels handled by
-// Noctalia, wofi as quick launcher. Column navigation: vim-native Niri.
+// Noctalia, fuzzel as quick launcher. Column navigation: vim-native Niri.
 // ============================================================
 
 binds {
@@ -28,6 +28,8 @@ binds {
     Mod+Alt+G hotkey-overlay-title="<b><span foreground='#ffb59f'>🤖</span> Grok Bot</b>" { spawn "grok-bot"; }
     Mod+Shift+Z hotkey-overlay-title="<b><span foreground='#ffb59f'>🛡</span> ZAP</b>" { spawn "zaproxy"; }
     Mod+O hotkey-overlay-title="<b><span foreground='#ffb59f'>🔑</span> KeePass</b>" { spawn "keepassxc"; }
+    // --- OCR ---
+    Mod+Shift+O hotkey-overlay-title="<b><span foreground='#ffb59f'>📄</span> OCR</b>" { spawn "ocr"; }
     Mod+Z hotkey-overlay-title="<b><span foreground='#ffb59f'>🎯</span> Wofi</b>" { spawn "wofi" "--show" "drun"; }
     Mod+Space hotkey-overlay-title="<b><span foreground='#5a9a5a'>🚀</span> Fuzzel</b>" { spawn "fuzzel"; }
 
@@ -68,6 +70,9 @@ binds {
     // --- Video Wallpaper ---
     Mod+Alt+W hotkey-overlay-title="<b><span foreground='#ffb59f'>▶</span> Video Wallpaper</b>" { spawn-sh "$HOME/.config/niri/scripts/video-wallpaper.sh toggle DP-1"; }
     Mod+Alt+N hotkey-overlay-title="<b><span foreground='#ffb59f'>⏭</span> Next Video</b>" { spawn-sh "$HOME/.config/niri/scripts/video-wallpaper.sh next DP-1"; }
+
+    // --- Night Light ---
+    Mod+Alt+B hotkey-overlay-title="<b><span foreground='#ffb59f'>🌙</span> Night Light</b>" { spawn-sh "$HOME/.config/niri/scripts/night-light.sh toggle"; }
 
     // --- Quit ---
     Ctrl+Alt+Delete hotkey-overlay-title="<b><span foreground='#ffb59f'>⏻</span> Quit</b>" { quit; }

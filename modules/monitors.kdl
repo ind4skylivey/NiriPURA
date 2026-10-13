@@ -21,6 +21,8 @@ output "DP-2" {
 output "DP-1" {
     mode "1920x1080@179.961"
     position x=1080 y=1080
+    // Adaptive-Sync (FreeSync) activo en el OSD del LG; VRR solo cuando hay un juego en pantalla
+    variable-refresh-rate on-demand=true
     scale 1
 }
 
