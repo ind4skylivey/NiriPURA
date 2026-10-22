@@ -379,6 +379,27 @@ This means single windows stay at their natural column position instead of being
 
 ---
 
+## Config safety
+
+The niri config repo doubles as the live config (`~/.config/niri`), so a broken `config.kdl` means a fallback session (no keybinds, no modules) at next login.
+
+- Every commit is gated by `scripts/hooks/pre-commit` (wired via `core.hooksPath`), which runs `niri validate`. Invalid configs cannot be committed.
+- niri hot-reloads on save but keeps the running config when the new file fails to parse. The dangerous case is only **relogin with a broken file**.
+- niri has **no** `on-workspace-change` / `on-window-open` / `on-window-close` nodes. Never add event-hook blocks to any `.kdl` file.
+- Before any manual edit: `niri validate` first. After an edit: `niri validate` again.
+
+### Emergency restore
+
+```sh
+cd ~/.config/niri
+git restore config.kdl   # or the damaged file
+niri validate              # must say: config is valid
+```
+
+If the session is already broken: fix from a TTY (`Mod+X` may be dead, use `Ctrl+Alt+F3`), then relogin.
+
+---
+
 ## Links
 
 - [Niri GitHub](https://github.com/niri-wm/niri)

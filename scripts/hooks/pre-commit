@@ -1,0 +1,10 @@
+#!/bin/sh
+# Gate: block any commit while the niri config is invalid.
+# Wired via `git config core.hooksPath scripts/hooks` so the hook is versioned.
+cd "$(git rev-parse --show-toplevel)" || exit 1
+if ! niri validate >/dev/null 2>&1; then
+    echo "pre-commit: niri validate FAILED - commit blocked." >&2
+    echo "Run 'niri validate' in $PWD to see the error." >&2
+    exit 1
+fi
+echo "pre-commit: niri validate OK"

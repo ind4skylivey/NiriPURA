@@ -13,13 +13,13 @@ binds {
     Mod+Period hotkey-overlay-title="<b><span foreground='#ffb59f'>😀</span> Emoji</b>" { spawn-sh "noctalia msg panel-toggle launcher \"/emo \""; }
     Mod+V      hotkey-overlay-title="<b><span foreground='#ffb59f'>📋</span> Clipboard</b>" { spawn-sh "noctalia msg panel-toggle clipboard"; }
     Mod+D      hotkey-overlay-title="<b><span foreground='#ffb59f'>⚙</span> Control Center</b>" { spawn-sh "noctalia msg panel-toggle control-center"; }
-    Alt+Space  hotkey-overlay-title="<b><span foreground='#ffb59f'>🚀</span> Launcher</b>" { spawn-sh "noctalia msg panel-toggle launcher"; }
+    // Alt+Space  hotkey-overlay-title="<b><span foreground='#ffb59f'>🚀</span> Launcher</b>" { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+N      hotkey-overlay-title="<b><span foreground='#ffb59f'>🔔</span> Notifications</b>" { spawn-sh "noctalia msg panel-toggle control-center notifications"; }
     Mod+Escape hotkey-overlay-title="<b><span foreground='#ffb59f'>🚪</span> Session</b>" { spawn-sh "noctalia msg panel-toggle session"; }
     Mod+Alt+I  hotkey-overlay-title="<b><span foreground='#ffb59f'>⚡</span> Settings</b>" { spawn-sh "noctalia msg settings-toggle"; }
 
     // --- Apps ---
-    Mod+E hotkey-overlay-title="<b><span foreground='#ffb59f'>🍀</span> Emacs</b>" { spawn "emacs"; }
+    Mod+E hotkey-overlay-title="<b><span foreground='#ffb59f'>🍀</span> Emacs</b>" { spawn "emacsclient" "-c" "-a" ""; }
     Mod+X hotkey-overlay-title="<b><span foreground='#ffb59f'>⬡</span> Terminal</b>" { spawn "kitty"; }
     Mod+F hotkey-overlay-title="<b><span foreground='#ffb59f'>📁</span> Files</b>" { spawn "pcmanfm-qt"; }
     Mod+Shift+F hotkey-overlay-title="<b><span foreground='#ffb59f'>🌐</span> Qutebrowser</b>" { spawn "qutebrowser"; }
@@ -30,7 +30,7 @@ binds {
     Mod+O hotkey-overlay-title="<b><span foreground='#ffb59f'>🔑</span> KeePass</b>" { spawn "keepassxc"; }
     // --- OCR ---
     Mod+Shift+O hotkey-overlay-title="<b><span foreground='#ffb59f'>📄</span> OCR</b>" { spawn "ocr"; }
-    Mod+Z hotkey-overlay-title="<b><span foreground='#ffb59f'>🎯</span> Wofi</b>" { spawn "wofi" "--show" "drun"; }
+    Mod+Z hotkey-overlay-title="<b><span foreground='#ffb59f'>🗂</span> Strata</b>" { spawn "/home/il1v3y/.local/bin/strata"; }
     Mod+Space hotkey-overlay-title="<b><span foreground='#5a9a5a'>🚀</span> Fuzzel</b>" { spawn "fuzzel"; }
 
     // --- Fuzzel scripts (s1bgr0up.inc) ---
@@ -79,7 +79,7 @@ binds {
     Mod+Ctrl+Shift+Q hotkey-overlay-title="<b><span foreground='#ffb59f'>⏻</span> Quit</b>" { quit; }
 
     // --- README ---
-    Mod+Shift+W hotkey-overlay-title="<b><span foreground='#ffb59f'>📖</span> README</b>" { spawn "emacs" "/home/il1v3y/.config/niri/README.md"; }
+    Mod+Shift+W hotkey-overlay-title="<b><span foreground='#ffb59f'>📖</span> README</b>" { spawn "emacsclient" "-c" "-a" "" "/home/il1v3y/.config/niri/README.md"; }
 
     // ============================================================
     // WINDOW/COLUMN MOVEMENT -- vim-native Niri (no overlay)

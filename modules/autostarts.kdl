@@ -18,7 +18,7 @@ spawn-at-startup "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1"
 
 // Noctalia -- full shell: bar, notifications, launcher, control center,
 // lockscreen, wallpaper picker. Replaces Waybar + Dunst + Wofi/Rofi entirely.
-spawn-sh-at-startup "noctalia"
+spawn-sh-at-startup "systemd-run --user --scope --unit=noctalia -p MemoryHigh=1G -p MemoryMax=2G -p MemorySwapMax=512M noctalia"
 
 // Pin named workspaces to primary output (DP-1) after outputs settle.
 // Fixes cold-boot case where they land on a secondary output (e.g. DP-2).
@@ -31,7 +31,8 @@ spawn-sh-at-startup "swww-daemon"
 // Slow services - start in background after session is ready
 // Using spawn-sh-at-startup with & for background process
 spawn-sh-at-startup "sleep 10 && (openrgb --startminimized &)"
-spawn-sh-at-startup "emacs --daemon &"
+// emacs runs as the systemd user service (emacs.service); no manual daemon
+// spawn-sh-at-startup "emacs --daemon &"
 spawn-sh-at-startup "solaar -w hide &"
 
 // Fuzzel clipboard history daemon (fz-clip)
@@ -45,3 +46,12 @@ spawn-sh-at-startup "$HOME/.config/niri/scripts/night-light.sh start"
 
 // NOTE: waybar, dunst, rofi, and wofi are NOT started in this session.
 // They remain only in your DWM (X11) session, untouched.
+
+// Moved from XDG autostart (they raced the Wayland display; XDG copies set Hidden=true)
+spawn-sh-at-startup "sleep 3 && blueman-applet"
+spawn-sh-at-startup "sleep 3 && /usr/bin/kdeconnectd"
+spawn-sh-at-startup "sleep 3 && keepassxc"
+spawn-sh-at-startup "sleep 3 && pcmanfm-qt --daemon-mode"
+spawn-sh-at-startup "sleep 5 && /usr/bin/terax"
+spawn-sh-at-startup "sleep 5 && slack -s"
+spawn-sh-at-startup "sleep 5 && easyeffects --hide-window --service-mode"
