@@ -18,15 +18,18 @@ spawn-at-startup "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1"
 
 // Noctalia -- full shell: bar, notifications, launcher, control center,
 // lockscreen, wallpaper picker. Replaces Waybar + Dunst + Wofi/Rofi entirely.
-spawn-sh-at-startup "systemd-run --user --scope --unit=noctalia -p MemoryHigh=1G -p MemoryMax=2G -p MemorySwapMax=512M noctalia"
+// Pre-stop frees the unit name when orphaned processes from a previous
+// session keep the old noctalia.scope alive (systemd-run would refuse to
+// reuse the name and Noctalia would silently not start).
+spawn-sh-at-startup "systemctl --user stop noctalia.scope 2>/dev/null; systemd-run --user --scope --unit=noctalia -p MemoryHigh=1G -p MemoryMax=2G -p MemorySwapMax=512M noctalia"
 
 // Pin named workspaces to primary output (DP-1) after outputs settle.
 // Fixes cold-boot case where they land on a secondary output (e.g. DP-2).
 spawn-sh-at-startup "~/.config/niri/scripts/restore-named-workspaces.sh"
 
 
-// Wallpaper daemon
-spawn-sh-at-startup "swww-daemon"
+// swww-daemon removed: legacy from the pre-Noctalia stack. Nothing consumes
+// it; Noctalia renders wallpapers and the video wallpaper uses mpvpaper.
 
 // Slow services - start in background after session is ready
 // Using spawn-sh-at-startup with & for background process
