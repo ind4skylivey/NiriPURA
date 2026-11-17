@@ -5,7 +5,9 @@
 // ============================================================
 
 binds {
-    Mod+Shift+Slash hotkey-overlay-title="<b><span foreground='#ffb59f'>⌨</span> Keybindings</b>" { show-hotkey-overlay; }
+    Mod+Shift+Slash hotkey-overlay-title="<b><span foreground='#ffb59f'>⌨</span> Keybindings</b>" { spawn-sh "~/.config/quickshell/keybinds/toggle.sh"; }
+    Mod+Shift+E hotkey-overlay-title="<b><span foreground='#00d4ff'>⌘</span> Paleta de comandos</b>" { spawn-sh "~/.config/quickshell/cmdpalette/toggle.sh"; }
+    Mod+Shift+D hotkey-overlay-title="<b><span foreground='#00d4ff'>▣</span> ASUS panels</b>" { spawn-sh "~/.config/quickshell/asus-panels/toggle.sh"; }
 
     // --- Noctalia: full shell (bar/notif/launcher/lock/etc) ---
     Mod+L      hotkey-overlay-title="<b><span foreground='#ffb59f'>🔒</span> Lock</b>" { spawn-sh "$HOME/.config/niri/scripts/lockscreen-random"; }
@@ -233,7 +235,7 @@ binds {
     // --- Mic mute ---
     XF86AudioMicMute hotkey-overlay-title=null { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
 
-    // --- Audio picker ---
+    // --- Screenshot to clipboard ---
     Mod+Ctrl+P hotkey-overlay-title=null { screenshot-screen write-to-disk=false; }
 
     // --- Keyboard inhibit ---
@@ -264,6 +266,8 @@ binds {
     // --- Move workspace to monitor ---
     Mod+Shift+Ctrl+H hotkey-overlay-title=null { move-workspace-to-monitor-left; }
     Mod+Shift+Ctrl+L hotkey-overlay-title=null { move-workspace-to-monitor-right; }
+    Mod+Shift+Ctrl+K hotkey-overlay-title=null { move-workspace-to-monitor-up; }
+    Mod+Shift+Ctrl+J hotkey-overlay-title=null { move-workspace-to-monitor-down; }
 
     // --- Focus window or workspace (smart down/up) ---
     Mod+Alt+Down hotkey-overlay-title=null { focus-window-or-workspace-down; }

@@ -35,3 +35,33 @@ layer-rule {
         xray true
     }
 }
+
+// Blur behind the Quickshell keybinds cheatsheet (surface is card-sized)
+layer-rule {
+    match namespace="^keybinds-cheatsheet$"
+    geometry-corner-radius 12
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
+// Blur behind the ASUS vertical Quickshell panels
+layer-rule {
+    match namespace="^asus-panels$"
+    geometry-corner-radius 12
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
+// Blur behind the Quickshell command palette
+layer-rule {
+    match namespace="^cmd-palette$"
+    geometry-corner-radius 12
+    background-effect {
+        blur true
+        xray false
+    }
+}

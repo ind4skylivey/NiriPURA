@@ -51,7 +51,7 @@ window-rule {
     match app-id=r#"^Brave-browser$"#
     match app-id=r#"zen-alpha$"#
     match app-id=r#"^helium$"#
-    open-on-workspace "web"
+    open-on-workspace " web"
     background-effect {
         blur true
         xray true
@@ -81,9 +81,9 @@ window-rule {
 
 window-rule {
     match app-id=r#"^dolphin$"#
-    match app-id=r#"^Pcmanfm-qt$"#
+    match app-id=r#"(?i)^pcmanfm-qt$"#
     match app-id=r#"^Thunar$"#
-    open-on-workspace "docs"
+    open-on-workspace " docs"
     open-floating true
     default-column-width { fixed 900; }
 }
@@ -98,25 +98,25 @@ window-rule {
     match app-id=r#"^vesktop$"#
     match app-id=r#"^discord$"#
     match app-id=r#"^Legcord$"#
-    open-on-workspace "chill"
+    open-on-workspace " chill"
 }
 
 window-rule {
     match app-id=r#"^BurpSuite$"#
     match app-id=r#"^Ghidra$"#
     match app-id=r#"^org\.owasp\.ZAP$"#
-    open-on-workspace "sec"
+    open-on-workspace " sec"
 }
 
 window-rule {
     match app-id=r#"^Wireshark$"#
-    open-on-workspace "sec"
+    open-on-workspace " sec"
 }
 
 window-rule {
-    match app-id=r#"^Pavucontrol$"#
-    match app-id=r#"^Blueman-manager$"#
-    match app-id=r#"^Nm-connection-editor$"#
+    match app-id=r#"(?i)^(org\.pulseaudio\.)?pavucontrol$"#
+    match app-id=r#"(?i)^blueman-(manager|adapters)$"#
+    match app-id=r#"(?i)^nm-connection-editor$"#
     open-floating true
 }
 
@@ -130,9 +130,18 @@ window-rule {
 // --- Terminals: transparency + blur ---
 window-rule {
     match app-id=r#"^Alacritty$"#
+    background-effect {
+        blur false
+        xray true
+    }
+    opacity 0.97
+}
+
+// kitty without blur so the wallpaper stays sharp
+window-rule {
     match app-id=r#"^kitty$"#
     background-effect {
-        blur true
+        blur false
         xray true
     }
     opacity 0.97
@@ -148,14 +157,14 @@ window-rule {
 // --- Spotify: media workspace ---
 window-rule {
     match app-id=r#"^spotify$"#
-    open-on-workspace "chill"
+    open-on-workspace " chill"
 }
 
 // --- Thunderbird: chat workspace ---
 window-rule {
     match app-id=r#"^thunderbird$"#
     match app-id=r#"^org\.mozilla\.Thunderbird$"#
-    open-on-workspace "chill"
+    open-on-workspace " chill"
 }
 
 // --- IDEs: default column layout ---
@@ -205,4 +214,266 @@ window-rule {
 window-rule {
     match app-id=r#"^valheim\.x86_64$"#
     open-fullscreen true
+}
+
+// qBittorrent slightly transparent, with blur (Nightseed Transparent)
+window-rule {
+    match app-id=r#"^org\.qbittorrent\.qBittorrent$"#
+    opacity 0.85
+    background-effect {
+        blur true
+        xray true
+    }
+}
+
+// ============================================================
+// Style pack
+// ============================================================
+
+// 1. Glass: apps oscuras translúcidas con blur
+window-rule {
+    match app-id=r#"(?i)^org\.nicotine_plus\.Nicotine$"#
+    match app-id=r#"(?i)^nicotine"#
+    match app-id=r#"(?i)^spotify$"#
+    match app-id=r#"(?i)^(dev\.sfg\.)?orchard$"#
+    match app-id=r#"(?i)^(md\.)?obsidian$"#
+    match app-id=r#"(?i)notesnook"#
+    match app-id=r#"(?i)^emacs$"#
+    match app-id=r#"(?i)^(dev\.zed\.)?zed$"#
+    match app-id=r#"(?i)^cursor$"#
+    match app-id=r#"(?i)^legcord$"#
+    match app-id=r#"(?i)^heroic$"#
+    match app-id=r#"(?i)faugus"#
+    match app-id=r#"(?i)easyeffects"#
+    opacity 0.9
+    background-effect {
+        blur true
+        xray true
+    }
+}
+
+// 2a. Video: sólido, sin blur (direct scanout en fullscreen)
+window-rule {
+    match app-id=r#"(?i)^mpv$"#
+    match app-id=r#"(?i)^stremio"#
+    match app-id=r#"(?i)nuvio"#
+    opacity 1.0
+    background-effect {
+        blur false
+        xray false
+    }
+}
+
+// 2b. Arte, audio y emuladores: sólido, colores fieles
+window-rule {
+    match app-id=r#"(?i)^krita$"#
+    match app-id=r#"(?i)^gimp"#
+    match app-id=r#"(?i)^blender$"#
+    match app-id=r#"(?i)^ardour"#
+    match app-id=r#"(?i)^eden$"#
+    match app-id=r#"(?i)^dev\.eden_emu\.eden$"#
+    match app-id=r#"(?i)^ryujinx$"#
+    match app-id=r#"(?i)^lichii$"#
+    match app-id=r#"(?i)^cheezyemu$"#
+    match app-id=r#"(?i)^pcsx2"#
+    match app-id=r#"(?i)duckstation"#
+    match app-id=r#"(?i)^dolphin-emu$"#
+    match app-id=r#"(?i)^retroarch$"#
+    match app-id=r#"(?i)^es-de$"#
+    match app-id=r#"(?i)^org\.es_de\.frontend$"#
+    opacity 1.0
+    background-effect {
+        blur false
+        xray false
+    }
+}
+
+// 3. Paneles y utilidades: flotantes
+window-rule {
+    match app-id=r#"(?i)corectrl"#
+    match app-id=r#"(?i)lact"#
+    match app-id=r#"(?i)openrgb"#
+    match app-id=r#"(?i)polychromatic"#
+    match app-id=r#"(?i)solaar"#
+    match app-id=r#"(?i)opentabletdriver"#
+    match app-id=r#"(?i)flatseal"#
+    match app-id=r#"(?i)protonplus"#
+    match app-id=r#"(?i)goverlay"#
+    match app-id=r#"(?i)^org\.kde\.kdeconnect"#
+    match app-id=r#"(?i)voxtype"#
+    match app-id=r#"(?i)cachyos-hello"#
+    match app-id=r#"(?i)^org\.cachyos\.hello$"#
+    match app-id=r#"(?i)kernelmanager"#
+    match app-id=r#"(?i)scx-manager"#
+    match app-id=r#"(?i)btrfs-assistant"#
+    match app-id=r#"(?i)auto-cpufreq"#
+    match app-id=r#"(?i)normcap"#
+    match app-id=r#"(?i)lxqt-archiver"#
+    match app-id=r#"(?i)^calibre-ebook-viewer$"#
+    open-floating true
+}
+
+// 4. Secretos: en negro al compartir pantalla o capturar
+window-rule {
+    match app-id=r#"(?i)keepassxc"#
+    match app-id=r#"(?i)proton-pass"#
+    match app-id=r#"(?i)proton pass"#
+    match app-id=r#"(?i)^exodus$"#
+    match app-id=r#"(?i)feather"#
+    match app-id=r#"(?i)seahorse"#
+    block-out-from "screen-capture"
+}
+
+// 5. Workspaces por app
+window-rule {
+    match app-id=r#"(?i)^slack$"#
+    match app-id=r#"(?i)whatsapp"#
+    open-on-workspace " chill"
+}
+window-rule {
+    match app-id=r#"(?i)dbeaver"#
+    match app-id=r#"(?i)tableplus"#
+    open-on-workspace "󰳆 dev"
+}
+window-rule {
+    match app-id=r#"(?i)jadx"#
+    open-on-workspace " sec"
+}
+
+// ============================================================
+// App-to-workspace map (last, so it wins over earlier rules).
+// Workspaces can move across monitors (Mod+Shift+Ctrl+H/J/K/L); apps follow them.
+// ============================================================
+window-rule {
+    match app-id=r#"(?i)^kitty$"#
+    open-on-workspace " term"
+}
+window-rule {
+    match app-id=r#"(?i)^helium$"#
+    match app-id=r#"(?i)^zen"#
+    match app-id=r#"(?i)qutebrowser"#
+    match app-id=r#"(?i)firefox"#
+    open-on-workspace " web"
+}
+window-rule {
+    match app-id=r#"(?i)^cursor$"#
+    match app-id=r#"(?i)^(dev\.zed\.)?zed$"#
+    match app-id=r#"(?i)^emacs$"#
+    match app-id=r#"(?i)^grok-bot$"#
+    match app-id=r#"(?i)dbeaver"#
+    match app-id=r#"(?i)tableplus"#
+    match app-id=r#"(?i)meld"#
+    match app-id=r#"(?i)kdiff3"#
+    match app-id=r#"(?i)cmake"#
+    match app-id=r#"(?i)lerd"#
+    match app-id=r#"(?i)^terax$"#
+    match app-id=r#"(?i)^mine$"#
+    match app-id=r#"(?i)^org\.neovim\.nvim$"#
+    match app-id=r#"(?i)^gvim$"#
+    open-on-workspace "󰳆 dev"
+}
+window-rule {
+    match app-id=r#"(?i)^pcmanfm-qt$"#
+    match app-id=r#"(?i)nautilus"#
+    match app-id=r#"(?i)strata"#
+    match app-id=r#"(?i)^(md\.)?obsidian$"#
+    match app-id=r#"(?i)notesnook"#
+    match app-id=r#"(?i)notion\.so"#
+    match app-id=r#"(?i)vault-hq"#
+    match app-id=r#"(?i)zathura"#
+    match app-id=r#"(?i)^calibre"#
+    match app-id=r#"(?i)linear\.app"#
+    match app-id=r#"(?i)keypunch"#
+    open-on-workspace " docs"
+}
+window-rule {
+    match app-id=r#"(?i)^dev\.noctalia\.Noctalia$"#
+    match app-id=r#"(?i)corectrl"#
+    match app-id=r#"(?i)lact"#
+    match app-id=r#"(?i)openrgb"#
+    match app-id=r#"(?i)easyeffects"#
+    match app-id=r#"(?i)keepassxc"#
+    match app-id=r#"(?i)proton-pass"#
+    match app-id=r#"(?i)proton pass"#
+    match app-id=r#"(?i)flatseal"#
+    match app-id=r#"(?i)cachyos-hello"#
+    match app-id=r#"(?i)^org\.cachyos\.hello$"#
+    match app-id=r#"(?i)kernelmanager"#
+    match app-id=r#"(?i)scx-manager"#
+    match app-id=r#"(?i)btrfs-assistant"#
+    match app-id=r#"(?i)auto-cpufreq"#
+    match app-id=r#"(?i)polychromatic"#
+    match app-id=r#"(?i)solaar"#
+    match app-id=r#"(?i)opentabletdriver"#
+    match app-id=r#"(?i)ibus"#
+    match app-id=r#"(?i)gammastep"#
+    match app-id=r#"(?i)redshift"#
+    match app-id=r#"(?i)voxtype"#
+    match app-id=r#"(?i)seahorse"#
+    match app-id=r#"(?i)pcmanfm-qt-desktop-pref"#
+    open-on-workspace " conf"
+}
+window-rule {
+    match app-id=r#"(?i)^ardour"#
+    match app-id=r#"(?i)^krita$"#
+    match app-id=r#"(?i)^gimp"#
+    match app-id=r#"(?i)^blender$"#
+    match app-id=r#"(?i)simplescreenrecorder"#
+    open-on-workspace " s1b"
+}
+window-rule {
+    match app-id=r#"(?i)wireshark"#
+    match app-id=r#"(?i)burpsuite"#
+    match app-id=r#"(?i)owasp\.zap"#
+    match app-id=r#"(?i)ghidra"#
+    match app-id=r#"(?i)jadx"#
+    match app-id=r#"(?i)sentry\.io"#
+    match app-id=r#"(?i)hbblfifohofgngfbjbiimbbcimepbdcb"#
+    open-on-workspace " sec"
+}
+window-rule {
+    match app-id=r#"(?i)^legcord$"#
+    match app-id=r#"(?i)^(vesktop|discord)$"#
+    match app-id=r#"(?i)^slack$"#
+    match app-id=r#"(?i)whatsapp"#
+    match app-id=r#"(?i)^spotify$"#
+    match app-id=r#"(?i)^(dev\.sfg\.)?orchard$"#
+    match app-id=r#"(?i)^stremio"#
+    match app-id=r#"(?i)nuvio"#
+    match app-id=r#"(?i)nicotine"#
+    match app-id=r#"(?i)qbittorrent"#
+    match app-id=r#"(?i)^jd-main$"#
+    match app-id=r#"(?i)jdownloader"#
+    match app-id=r#"(?i)kdeconnect"#
+    match app-id=r#"(?i)thunderbird"#
+    open-on-workspace " chill"
+}
+window-rule {
+    match app-id=r#"(?i)^steam$"#
+    match app-id=r#"(?i)^heroic$"#
+    match app-id=r#"(?i)faugus"#
+    match app-id=r#"(?i)^es-de$"#
+    match app-id=r#"(?i)^org\.es_de\.frontend$"#
+    match app-id=r#"(?i)^eden$"#
+    match app-id=r#"(?i)eden_emu"#
+    match app-id=r#"(?i)^ryujinx$"#
+    match app-id=r#"(?i)^lichii$"#
+    match app-id=r#"(?i)^cheezyemu$"#
+    match app-id=r#"(?i)^pcsx2"#
+    match app-id=r#"(?i)duckstation"#
+    match app-id=r#"(?i)^dolphin-emu$"#
+    match app-id=r#"(?i)^retroarch$"#
+    match app-id=r#"(?i)protonplus"#
+    match app-id=r#"(?i)goverlay"#
+    match app-id=r#"(?i)protontricks"#
+    match app-id=r#"(?i)winetricks"#
+    match app-id=r#"(?i)^gale$"#
+    match app-id=r#"(?i)final-fantasy"#
+    open-on-workspace " games"
+}
+window-rule {
+    match app-id=r#"(?i)virt-manager"#
+    match app-id=r#"(?i)^exodus$"#
+    match app-id=r#"(?i)feather"#
+    open-on-workspace " wm"
 }

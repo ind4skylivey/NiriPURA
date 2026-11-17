@@ -1,0 +1,4 @@
+Version = "1.0.0"
+Authors = ["ind4skylivey"]
+Name = "ASUS Panels"
+Description = "Writes live Nicotine+ download stats for the Quickshell ASUS panel. Local cache only."
