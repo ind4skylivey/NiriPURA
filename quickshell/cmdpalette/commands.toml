@@ -1,0 +1,165 @@
+# S1B.CMD — paleta de comandos
+# Para agregar uno nuevo, copia un bloque [[commands]] y rellena los campos:
+#   id        único, sin espacios
+#   name      título que aparece en la lista
+#   icon      glifo de Nerd Font (opcional)
+#   group     agrupación (sistema, limpiar, servicios, niri, partidas, …)
+#   help      una línea de ayuda
+#   builtin   nombre de acción implementada en run.py
+#   cmd       comando de shell (si no hay builtin)
+#   confirm   true = pide Enter otra vez antes de ejecutar
+#   danger    true = se marca en rosa y exige confirm si confirm=true
+#   sudo      true = se abre en kitty para que escribas tu contraseña
+#
+# No pongas contraseñas aquí.
+
+[[commands]]
+id = "espacio"
+name = "Espacio"
+icon = "󰋊"
+group = "sistema"
+help = "Libre en / y HD2, y carpetas que más ocupan"
+builtin = "espacio"
+
+[[commands]]
+id = "estado"
+name = "Estado del sistema"
+icon = "󰍛"
+group = "sistema"
+help = "Updates, servicios caídos y temperaturas"
+builtin = "estado"
+
+[[commands]]
+id = "cache-dry"
+name = "Limpiar caché (simulación)"
+icon = "󰃢"
+group = "limpiar"
+help = "Lista cachés regenerables y tamaños; no borra nada"
+builtin = "cache_dry"
+
+[[commands]]
+id = "cache-paru"
+name = "Borrar caché de paru"
+icon = "󰃢"
+group = "limpiar"
+help = "Borra ~/.cache/paru (se regenera al instalar)"
+builtin = "cache_paru"
+confirm = true
+danger = true
+
+[[commands]]
+id = "cache-thumbnails"
+name = "Borrar miniaturas"
+icon = "󰈔"
+group = "limpiar"
+help = "Borra ~/.cache/thumbnails"
+builtin = "cache_thumbnails"
+confirm = true
+danger = true
+
+[[commands]]
+id = "cache-shaders"
+name = "Borrar shader cache de Steam"
+icon = "󰓓"
+group = "limpiar"
+help = "Borra steamapps/shadercache (los juegos lo vuelven a generar)"
+builtin = "cache_shaders"
+confirm = true
+danger = true
+
+[[commands]]
+id = "cache-pacman"
+name = "Borrar caché de pacman"
+icon = "󰏖"
+group = "limpiar"
+help = "paccache -r (conserva las últimas 3 versiones); pide sudo en kitty"
+cmd = "sudo paccache -r"
+sudo = true
+confirm = true
+danger = true
+
+[[commands]]
+id = "restart-noctalia"
+name = "Reiniciar Noctalia"
+icon = "󰯈"
+group = "servicios"
+help = "systemctl --user restart noctalia.service"
+builtin = "restart_noctalia"
+
+[[commands]]
+id = "restart-omarchy"
+name = "Reiniciar omarchy-link"
+icon = "󰟘"
+group = "servicios"
+help = "systemctl --user restart omarchy-link.service"
+builtin = "restart_omarchy"
+
+[[commands]]
+id = "restart-voxtype"
+name = "Reiniciar voxtype"
+icon = "󰍬"
+group = "servicios"
+help = "systemctl --user restart voxtype.service"
+builtin = "restart_voxtype"
+
+[[commands]]
+id = "restart-mpd"
+name = "Reiniciar MPD"
+icon = "󰝚"
+group = "servicios"
+help = "systemctl --user restart mpd.service"
+builtin = "restart_mpd"
+
+[[commands]]
+id = "restart-asus"
+name = "Reiniciar paneles ASUS"
+icon = "󰍹"
+group = "servicios"
+help = "Reinicia qs -c asus-panels"
+builtin = "restart_asus"
+
+[[commands]]
+id = "restart-bluetooth"
+name = "Reiniciar Bluetooth"
+icon = "󰂯"
+group = "servicios"
+help = "sudo systemctl restart bluetooth; pide sudo en kitty"
+cmd = "sudo systemctl restart bluetooth"
+sudo = true
+confirm = true
+danger = true
+
+[[commands]]
+id = "niri-validate"
+name = "Validar niri"
+icon = "󰉹"
+group = "niri"
+help = "niri validate (no aplica cambios)"
+builtin = "niri_validate"
+
+[[commands]]
+id = "niri-reload"
+name = "Recargar niri"
+icon = "󰑓"
+group = "niri"
+help = "Valida y recarga la config (niri msg action load-config-file)"
+builtin = "niri_reload"
+confirm = true
+
+[[commands]]
+id = "saves-list"
+name = "Partidas: listar"
+icon = "󰈔"
+group = "partidas"
+help = "Muestra rutas de partidas conocidas (solo lista)"
+builtin = "saves_list"
+
+[[commands]]
+id = "saves-backup"
+name = "Respaldar partidas"
+icon = "󰁯"
+group = "partidas"
+help = "Copia partidas conocidas a HD2/backups/game-safe/<fecha>-quick/"
+builtin = "saves_backup"
+confirm = true
+danger = true

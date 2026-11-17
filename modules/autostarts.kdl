@@ -58,3 +58,6 @@ spawn-sh-at-startup "sleep 3 && pcmanfm-qt --daemon-mode"
 spawn-sh-at-startup "sleep 5 && /usr/bin/terax"
 spawn-sh-at-startup "sleep 5 && slack -s"
 spawn-sh-at-startup "sleep 5 && easyeffects --hide-window --service-mode"
+
+// ASUS vertical desktop panels (EMU.DECK + DL.STREAM)
+spawn-sh-at-startup "~/.config/quickshell/asus-panels/toggle.sh start"

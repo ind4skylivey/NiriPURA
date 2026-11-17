@@ -70,7 +70,7 @@ It does **not** change hide/size/label widget flags — those stay as you set th
 
 ## Keybindings Overview
 
-Press `Mod+Shift+Slash` to show the hotkey overlay. Press `Mod+Shift+W` to open this README in Emacs.
+Press `Mod+Shift+Slash` for the Quickshell keybinds cheatsheet. Press `Mod+Shift+W` to open this README in Emacs.
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
@@ -308,6 +308,30 @@ This means single windows stay at their natural column position instead of being
 
 ---
 
+
+## Quickshell
+
+Three small Quickshell shells live under `quickshell/` in this repo. They are not started by niri automatically unless you copy or symlink them into `~/.config/quickshell/<name>/` (Quickshell loads configs from there with `qs -c <name>`).
+
+| Config | What it is | Launch |
+|--------|------------|--------|
+| `quickshell/keybinds/` | Keybind cheatsheet, parsed from `modules/keybinds.kdl` | `Mod+Shift+Slash` or `qs -c keybinds` |
+| `quickshell/asus-panels/` | Vertical EMU.DECK and DL.STREAM panels (on DP-2) | `Mod+Shift+D` toggles; autostart starts them with the session |
+| `quickshell/cmdpalette/` | S1B.CMD command palette | `Mod+Shift+E` or `qs -c cmdpalette` |
+
+A typical install is a symlink per config:
+
+```
+mkdir -p ~/.config/quickshell
+ln -sfn /path/to/NiriPURA/quickshell/keybinds ~/.config/quickshell/keybinds
+ln -sfn /path/to/NiriPURA/quickshell/asus-panels ~/.config/quickshell/asus-panels
+ln -sfn /path/to/NiriPURA/quickshell/cmdpalette ~/.config/quickshell/cmdpalette
+```
+
+The ASUS panels talk to a Nicotine+ plugin for live transfer stats. Copy or symlink `quickshell/asus-panels/nicotine-plugin/` to `~/.local/share/nicotine/plugins/asus_panels/` and enable the plugin in Nicotine+. It only writes a local cache; it does not ship any credentials.
+
+If your game library is not on `/media/<user>/HD2`, set `NIRIPURA_HD2` (and optionally `ESDE_MEDIA_ROOT`, `ESDE_ROM_ROOT`, `ESDE_GAMELIST_ROOT`) before launching the panels.
+
 ## Files
 
 ```
@@ -327,6 +351,11 @@ This means single windows stay at their natural column position instead of being
 │   └── video-wallpaper.sh
 ├── noctalia.kdl           # Noctalia theme overrides (colors)
 └── README.md              # This file
+
+~/.config/quickshell/      # symlinked from repo quickshell/<name>/
+├── keybinds/              # cheatsheet (Mod+Shift+Slash)
+├── asus-panels/           # EMU.DECK + DL.STREAM (Mod+Shift+D)
+└── cmdpalette/            # S1B.CMD palette (Mod+Shift+E)
 
 ~/.local/bin/
 ├── fz                    # Master command palette (Mod+A)
