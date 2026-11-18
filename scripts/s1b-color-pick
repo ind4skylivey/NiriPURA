@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# s1b-color-pick — pick a pixel with niri, copy its hex to the clipboard, notify.
+# niri native picker only (hyprpicker needs wlr-screencopy, which niri lacks).
+hex=$(niri msg pick-color 2>/dev/null | grep -oiE "#[0-9a-f]{6}" | head -n 1)
+[ -z "$hex" ] && exit 0          # cancelled with Esc
+printf "%s" "$hex" | wl-copy
+notify-send -a "S1B PICK" "󰈊 $hex copied" "<span foreground=\"$hex\">████████</span>  $hex"

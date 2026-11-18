@@ -21,3 +21,8 @@ Thumbs.db
 
 # CodeGraph local index
 .codegraph/
+
+# Local backups, per-machine schedule config and Python caches
+*.bak*
+scripts/theme-schedule.conf
+__pycache__/

@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════
+# fz-niri - Niri actions menu using fuzzel dmenu mode
+# Group: s1bgr0up.inc
+# Usage: fz-niri
+# Control the compositor: windows, workspaces, screenshots, power
+# ═══════════════════════════════════════════════════════════════════════
+
+# Clean stale fuzzel lock (prevents "fuzzel already running" errors)
+rm -f /run/user/$(id -u)/fuzzel-wayland-1.lock 2>/dev/null
+
+# Actions (label|command)
+actions=(
+    "🪟  Toggle Floating|niri msg action toggle-window-floating"
+    "📐  Maximize Column|niri msg action maximize-column"
+    "🖥️  Fullscreen Window|niri msg action fullscreen-window"
+    "📸  Screenshot|niri msg action screenshot"
+    "🖼️  Screenshot Screen|niri msg action screenshot-screen"
+    "🪟  Screenshot Window|niri msg action screenshot-window"
+    "📺  Power Off Monitors|niri msg action power-off-monitors"
+    "❌  Close Window|niri msg action close-window"
+    "⬆️  Focus Workspace Up|niri msg action focus-workspace-up"
+    "⬇️  Focus Workspace Down|niri msg action focus-workspace-down"
+    "🔙  Previous Workspace|niri msg action focus-workspace-previous"
+    "📦  Move Window Up|niri msg action move-window-to-workspace-up"
+    "📦  Move Window Down|niri msg action move-window-to-workspace-down"
+    "👤  Log Out|niri msg action quit"
+)
+
+# Show menu and capture selection
+selection=$(printf '%s\n' "${actions[@]%%|*}" | fuzzel --dmenu --prompt="🎛️ s1bgroup:~# " --lines=14)
+
+# Exit if cancelled
+[ -z "$selection" ] && exit 0
+
+# Find and run the matching command
+for action in "${actions[@]}"; do
+    label="${action%%|*}"
+    cmd="${action#*|}"
+    if [ "$label" = "$selection" ]; then
+        eval "$cmd"
+        break
+    fi
+done

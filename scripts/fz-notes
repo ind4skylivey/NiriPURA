@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════
+# fz-notes - Markdown notes manager
+# Group: s1bgr0up.inc
+# Usage: fz-notes
+# Lists/creates notes in ~/Notes, opens in Emacs.
+# ═══════════════════════════════════════════════════════════════════════
+
+# Clean stale fuzzel lock
+rm -f /run/user/$(id -u)/fuzzel-wayland-1.lock 2>/dev/null
+
+NOTES_DIR="${NOTES_DIR:-$HOME/Notes}"
+EDITOR_CMD="${EDITOR_CMD:-emacsclient -c}"
+
+mkdir -p "$NOTES_DIR"
+
+# Build list: existing notes + "new note" action
+existing=$(find "$NOTES_DIR" -maxdepth 2 -name '*.md' -printf '%TY-%Tm-%Td %TH:%TM %p\n' 2>/dev/null \
+    | sort -r \
+    | sed "s|^\([0-9: -]*\) $NOTES_DIR/\(.*\)|📄 \2|")
+
+menu="➕  New note..."
+[ -n "$existing" ] && menu="$menu"$'\n'"$existing"
+
+selection=$(printf '%s\n' "$menu" | fuzzel --dmenu --prompt="📝 s1bgroup:~# " --lines=12 --placeholder="Note..." 2>/dev/null)
+[ -z "$selection" ] && exit 0
+
+if [ "$selection" = "➕  New note..." ]; then
+    # Ask for note name
+    name=$(fuzzel --dmenu --prompt="📝 Name:" --lines=0 --placeholder="my-note (no .md)" 2>/dev/null)
+    [ -z "$name" ] && exit 0
+    [[ "$name" != *.md ]] && name="$name.md"
+    file="$NOTES_DIR/$name"
+    # Sanitize: no slashes escaping the dir
+    file="$(realpath -m "$file")"
+    case "$file" in
+        "$NOTES_DIR"/*) : ;;
+        *) notify-send "fz-notes" "Invalid note name" -i dialog-error; exit 1 ;;
+    esac
+    [ ! -f "$file" ] && printf '# %s\n\n' "${name%.md}" > "$file"
+    exec $EDITOR_CMD "$file" &
+else
+    note="${selection#📄 }"
+    exec $EDITOR_CMD "$NOTES_DIR/$note" &
+fi

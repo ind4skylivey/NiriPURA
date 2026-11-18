@@ -6,10 +6,12 @@
 // ============================================================
 
 // Wayland session bootstrap
-spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
-spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "DISPLAY" "XDG_CURRENT_DESKTOP" "QT_QPA_PLATFORM"
+spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "DISPLAY" "XDG_CURRENT_DESKTOP" "QT_QPA_PLATFORM"
 // Restart portal after Wayland env is imported (fixes KDE Connect Remote Input).
-spawn-sh-at-startup "sleep 3 && systemctl --user restart xdg-desktop-portal hypr-kdeconnect-portal"
+spawn-sh-at-startup "sleep 3 && systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk hypr-kdeconnect-portal"
+// Voxtype OSD/wtype need Wayland env; unit may start before import (same race as portals).
+spawn-sh-at-startup "sleep 2 && systemctl --user try-restart voxtype.service"
 // NiriShift: repair xdg-desktop-portal after Gaming Mode round-trip
 spawn-sh-at-startup "niri-shift-portal-recovery"
 
@@ -18,10 +20,10 @@ spawn-at-startup "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1"
 
 // Noctalia -- full shell: bar, notifications, launcher, control center,
 // lockscreen, wallpaper picker. Replaces Waybar + Dunst + Wofi/Rofi entirely.
-// Pre-stop frees the unit name when orphaned processes from a previous
-// session keep the old noctalia.scope alive (systemd-run would refuse to
-// reuse the name and Noctalia would silently not start).
-spawn-sh-at-startup "systemctl --user stop noctalia.scope 2>/dev/null; systemd-run --user --scope --unit=noctalia -p MemoryHigh=1G -p MemoryMax=2G -p MemorySwapMax=512M noctalia"
+// Runs as the noctalia.service user unit (auto-revive on death, sane memory
+// limits, no transient-scope name collisions). This start is idempotent and
+// complements WantedBy=graphical-session.target.
+spawn-sh-at-startup "sleep 2 && systemctl --user start noctalia.service"
 
 // Pin named workspaces to primary output (DP-1) after outputs settle.
 // Fixes cold-boot case where they land on a secondary output (e.g. DP-2).
@@ -39,10 +41,10 @@ spawn-sh-at-startup "sleep 10 && (openrgb --startminimized &)"
 spawn-sh-at-startup "solaar -w hide &"
 
 // Fuzzel clipboard history daemon (fz-clip)
-spawn-sh-at-startup "/home/il1v3y/.local/bin/fz-clip --watch &"
+spawn-sh-at-startup "$HOME/.config/niri/scripts/fz-clip --watch &"
 
-// Auto-lock after 5 minutes of inactivity
-spawn-sh-at-startup "swayidle -w timeout 300 'noctalia msg session lock' resume 'notify-send \"Welcome back\"' &"
+// Idle: random lockscreen at 5 min, monitors off at 10 min (any input wakes them), lock before suspend
+spawn-sh-at-startup "swayidle -w timeout 300 '$HOME/.config/niri/scripts/lockscreen-random' resume 'notify-send \"Welcome back\"' timeout 600 'niri msg action power-off-monitors' before-sleep 'noctalia msg session lock' &"
 
 // Night light: gammastep auto cycle for Buenos Aires (6500K day / 3500K night)
 spawn-sh-at-startup "$HOME/.config/niri/scripts/night-light.sh start"
@@ -58,6 +60,8 @@ spawn-sh-at-startup "sleep 3 && pcmanfm-qt --daemon-mode"
 spawn-sh-at-startup "sleep 5 && /usr/bin/terax"
 spawn-sh-at-startup "sleep 5 && slack -s"
 spawn-sh-at-startup "sleep 5 && easyeffects --hide-window --service-mode"
+spawn-sh-at-startup "sleep 6 && qbittorrent --no-splash"  // WebUI 127.0.0.1:8180 for DL.STREAM
+spawn-sh-at-startup "sleep 6 && nicotine --hidden"  // plugin asus_panels alimenta DL.STREAM
 
 // ASUS vertical desktop panels (EMU.DECK + DL.STREAM)
-spawn-sh-at-startup "~/.config/quickshell/asus-panels/toggle.sh start"
+spawn-at-startup "$HOME/.config/quickshell/asus-panels/toggle.sh" "start"

@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════
+# fz-ssh - SSH host picker
+# Group: s1bgr0up.inc
+# Usage: fz-ssh
+# Lists hosts from ~/.ssh/config, connects in kitty.
+# ═══════════════════════════════════════════════════════════════════════
+
+# Clean stale fuzzel lock
+rm -f /run/user/$(id -u)/fuzzel-wayland-1.lock 2>/dev/null
+
+TERMINAL="${TERMINAL:-kitty}"
+SSH_CONFIG="${SSH_CONFIG:-$HOME/.ssh/config}"
+
+# If config doesn't exist, show hint
+if [ ! -f "$SSH_CONFIG" ]; then
+    notify-send "fz-ssh" "No $SSH_CONFIG found. Create one to list hosts." -i dialog-information
+    exit 0
+fi
+
+# Parse host aliases: "Host name" lines (skip wildcard patterns)
+hosts=$(awk '/^Host / {
+    for (i=2; i<=NF; i++) {
+        h=$i
+        if (h !~ /[*?!]/) print "🖥  " h
+    }
+}' "$SSH_CONFIG" | sort -u)
+
+if [ -z "$hosts" ]; then
+    notify-send "fz-ssh" "No host aliases found in $SSH_CONFIG" -i dialog-information
+    exit 0
+fi
+
+selection=$(printf '%s\n' "$hosts" | fuzzel --dmenu --prompt="🖥  s1bgroup:~# " --lines=12 --placeholder="Host..." 2>/dev/null)
+[ -z "$selection" ] && exit 0
+
+host="${selection#🖥  }"
+exec "$TERMINAL" -e ssh "$host" &

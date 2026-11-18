@@ -332,6 +332,20 @@ The ASUS panels talk to a Nicotine+ plugin for live transfer stats. Copy or syml
 
 If your game library is not on `/media/<user>/HD2`, set `NIRIPURA_HD2` (and optionally `ESDE_MEDIA_ROOT`, `ESDE_ROM_ROOT`, `ESDE_GAMELIST_ROOT`) before launching the panels.
 
+### Noctalia user service
+
+Noctalia runs as a systemd user unit (auto-restart, memory limits, waits for the Wayland socket). Install it with:
+
+```
+mkdir -p ~/.config/systemd/user
+ln -sfn /path/to/NiriPURA/systemd/noctalia.service ~/.config/systemd/user/noctalia.service
+ln -sfn /path/to/NiriPURA/systemd/noctalia.service.d ~/.config/systemd/user/noctalia.service.d
+systemctl --user daemon-reload
+systemctl --user enable noctalia.service
+```
+
+Limits are `MemoryHigh=4G`, `MemoryMax=8G`, `MemorySwapMax=2G`. Autostart also runs `systemctl --user start noctalia.service`.
+
 ## Files
 
 ```
@@ -346,7 +360,11 @@ If your game library is not on `/media/<user>/HD2`, set `NIRIPURA_HD2` (and opti
 │   ├── monitors.kdl       # Monitor config
 │   ├── window-rules.kdl   # Window behavior rules
 │   └── workspaces.kdl     # Named workspaces with Nerd Font icons
-├── scripts/
+├── scripts/               # helper scripts called by binds/autostart (fz*, s1b-*, ...)
+│   ├── fz, fz-search, fz-calc, fz-run, fz-clip, fz-windows, fz-niri,
+│   │   fz-pass, fz-ssh, fz-notes, fz-power, fz-emoji, niri-toggle-center
+│   ├── s1b-float-toggle, s1b-record-toggle, s1b-color-pick, s1b-torbox-add
+│   ├── theme-schedule.sh
 │   ├── toggle-output-profile.sh
 │   └── video-wallpaper.sh
 ├── noctalia.kdl           # Noctalia theme overrides (colors)
@@ -357,7 +375,7 @@ If your game library is not on `/media/<user>/HD2`, set `NIRIPURA_HD2` (and opti
 ├── asus-panels/           # EMU.DECK + DL.STREAM (Mod+Shift+D)
 └── cmdpalette/            # S1B.CMD palette (Mod+Shift+E)
 
-~/.local/bin/
+scripts/ (all fz-* scripts and niri-toggle-center)
 ├── fz                    # Master command palette (Mod+A)
 ├── fz-search             # Web search engine picker (Mod+Shift+S)
 ├── fz-calc               # Calculator (bc -l)
@@ -371,6 +389,8 @@ If your game library is not on `/media/<user>/HD2`, set `NIRIPURA_HD2` (and opti
 ├── fz-power              # Power menu
 ├── fz-emoji              # Emoji picker
 └── niri-toggle-center    # Uncenter column (Mod+Alt+C)
+
+The binds call these through `$HOME/.config/niri/scripts/<name>`, so symlink or clone the repo to `~/.config/niri`. `fz` finds its sibling `fz-*` scripts next to itself. `s1b-torbox-add` reads its token from `~/.config/torbox/api_key`, which is never stored in the repo. `fz-pass` takes a KeePassXC database from its argument or `$KEEPASS_DB`, and `fz-ssh` lists hosts from your own `~/.ssh/config`. `strata` is a compiled binary and is not shipped; the Mod+Z bind expects it in `~/.local/bin`. The Mod+Alt+P/K/J/M/H/Y/F binds call `~/.local/bin/omarchy-link`, the CLI of the separate Omarchy Link app (OmarchyTV pairing); install that app yourself, it is not part of this repo.
 
 ~/.local/state/noctalia/
 ├── settings.toml          # Noctalia runtime settings (bar, widgets) — LIVE state

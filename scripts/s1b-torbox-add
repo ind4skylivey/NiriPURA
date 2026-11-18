@@ -1,0 +1,26 @@
+#!/bin/bash
+# Send a magnet link (arg 1 or clipboard) to TorBox. Never prints the API key.
+APP="S1B TORBOX"
+KEYF="$HOME/.config/torbox/api_key"
+note() { notify-send -a "$APP" -u "${3:-normal}" "$1" "$2"; }
+magnet="${1:-$(wl-paste -n 2>/dev/null)}"
+magnet="$(printf '%s' "$magnet" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+case "$magnet" in
+  "magnet:?"*) ;;
+  *) note "Not a magnet link" "Copy a magnet:? link first." critical; exit 1 ;;
+esac
+[ -s "$KEYF" ] || { note "No API key" "Missing ~/.config/torbox/api_key" critical; exit 1; }
+resp="$(curl -sS --max-time 15 -X POST https://api.torbox.app/v1/api/torrents/createtorrent \
+  -H @<(printf 'Authorization: Bearer %s\n' "$(tr -d '[:space:]' < "$KEYF")") \
+  --data-urlencode "magnet=$magnet" 2>/dev/null)"
+out="$(printf '%s' "$resp" | python3 -c '
+import sys, json
+try:
+    d = json.load(sys.stdin)
+    print(("OK" if d.get("success") else "ERR") + "|" + str(d.get("detail") or d.get("error") or "")[:120])
+except Exception:
+    print("ERR|No valid response from TorBox")')"
+case "$out" in
+  OK\|*) note "Sent to TorBox" "${out#OK|}" ;;
+  *) note "TorBox failed" "${out#ERR|}" critical; exit 1 ;;
+esac

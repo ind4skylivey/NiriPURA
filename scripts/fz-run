@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════
+# fz-run - Run command (zsh history + PATH executables)
+# Group: s1bgr0up.inc
+# Usage: fz-run
+# Fuzzy-search shell history and installed commands, run in kitty.
+# ═══════════════════════════════════════════════════════════════════════
+
+# Clean stale fuzzel lock
+rm -f /run/user/$(id -u)/fuzzel-wayland-1.lock 2>/dev/null
+
+TERMINAL="${TERMINAL:-kitty}"
+HISTORY_FILE="${HISTORY_FILE:-$HOME/.zsh_history}"
+
+# Collect candidates: history (deduped, newest first) + PATH executables
+candidates=""
+if [ -f "$HISTORY_FILE" ]; then
+    # zsh history format: ": 1234:0;command"
+    candidates=$(sed -E 's/^: [0-9]+:[0-9]+;//' "$HISTORY_FILE" \
+        | grep -v '^$' \
+        | awk '!seen[$0]++' \
+        | tail -100)
+fi
+
+# Merge with PATH binaries
+candidates="$candidates"$'\n'"$(compgen -c 2>/dev/null | sort -u | head -200)"
+
+selection=$(printf '%s\n' "$candidates" | grep -v '^$' \
+    | fuzzel --dmenu --prompt="⚡ s1bgroup:~# " --lines=12 \
+        --placeholder="Command or history..." 2>/dev/null)
+[ -z "$selection" ] && exit 0
+
+# Launch in terminal
+exec "$TERMINAL" -e sh -c "$selection; echo; read -p 'Press Enter to close...'" &

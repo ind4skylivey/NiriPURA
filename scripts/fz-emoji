@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════
+# fz-emoji - Emoji picker using fuzzel dmenu mode
+# Group: s1bgr0up.inc
+# Usage: fz-emoji
+# Copies selected emoji to clipboard (wl-copy)
+# ═══════════════════════════════════════════════════════════════════════
+
+# Clean stale fuzzel lock (prevents "fuzzel already running" errors)
+rm -f /run/user/$(id -u)/fuzzel-wayland-1.lock 2>/dev/null
+
+# Emoji list (emoji|description)
+emojis=(
+    "😀|Grinning Face"
+    "😂|Joy"
+    "🤣|ROFL"
+    "😊|Smiling"
+    "😍|Heart Eyes"
+    "😎|Cool"
+    "🤔|Thinking"
+    "🤯|Mind Blown"
+    "🔥|Fire"
+    "✨|Sparkles"
+    "🎉|Party"
+    "💀|Skull"
+    "👾|Alien Monster"
+    "🤖|Robot"
+    "🌐|Globe"
+    "💻|Laptop"
+    "⌨️|Keyboard"
+    "🖥️|Desktop"
+    "📡|Satellite"
+    "🔒|Lock"
+    "🔓|Unlock"
+    "⚡|Lightning"
+    "💀|Skull"
+    "🛡️|Shield"
+    "🎯|Target"
+    "🚀|Rocket"
+    "⭐|Star"
+    "❤️|Heart"
+    "✅|Check"
+    "❌|Cross"
+    "⚠️|Warning"
+    "💾|Save"
+    "📁|Folder"
+    "📝|Note"
+    "🔧|Wrench"
+    "🧠|Brain"
+    "👁️|Eye"
+    "🔑|Key"
+    "🕶️|Sunglasses"
+    "🎮|Game"
+)
+
+# Show menu and capture selection
+selection=$(printf '%s\n' "${emojis[@]%%|*}" | fuzzel --dmenu --prompt="😀 s1bgroup:~# " --lines=12)
+[ -z "$selection" ] && exit 0
+
+# Copy emoji to clipboard
+echo -n "$selection" | wl-copy
+notify-send "Emoji copied" "$selection" 2>/dev/null

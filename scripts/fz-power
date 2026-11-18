@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════
+# fz-power - Power menu using fuzzel dmenu mode
+# Group: s1bgr0up.inc
+# Usage: fz-power
+# ═══════════════════════════════════════════════════════════════════════
+
+# Clean stale fuzzel lock (prevents "fuzzel already running" errors)
+rm -f /run/user/$(id -u)/fuzzel-wayland-1.lock 2>/dev/null
+
+# Options shown in the menu (label|command)
+options=(
+    "⏻  Power Off|systemctl poweroff"
+    "🔄  Reboot|systemctl reboot"
+    "⏾  Suspend|systemctl suspend"
+    "🔒  Lock|loginctl lock-session"
+    "👤  Log Out|niri msg action quit"
+    "📺  Screen Off|niri msg action power-off-monitors"
+)
+
+# Show menu and capture selection (single fuzzel call)
+selection=$(printf '%s\n' "${options[@]%%|*}" | fuzzel --dmenu --prompt="⚡ s1bgroup:~# " --lines=6)
+[ -z "$selection" ] && exit 0
+
+# Find and run the matching command
+for opt in "${options[@]}"; do
+    label="${opt%%|*}"
+    cmd="${opt#*|}"
+    if [ "$label" = "$selection" ]; then
+        eval "$cmd"
+        break
+    fi
+done

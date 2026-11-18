@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════
+# fz - Master command palette (Raycast-style home menu)
+# Group: s1bgr0up.inc
+# Usage: fz
+# Central hub that dispatches to all fz-* submenus.
+# ═══════════════════════════════════════════════════════════════════════
+
+# Clean stale fuzzel lock (prevents "fuzzel already running" errors)
+rm -f /run/user/$(id -u)/fuzzel-wayland-1.lock 2>/dev/null
+
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+
+# Entry format: "icon  Label|command"
+entries=(
+    "🔍  Web Search|$SCRIPT_DIR/fz-search"
+    "🧮  Calculator|$SCRIPT_DIR/fz-calc"
+    "⚡  Run Command|$SCRIPT_DIR/fz-run"
+    "📋  Clipboard History|$SCRIPT_DIR/fz-clip"
+    "🪟  Window Switcher|$SCRIPT_DIR/fz-windows"
+    "🎛  Niri Actions|$SCRIPT_DIR/fz-niri"
+    "🔑  Passwords|$SCRIPT_DIR/fz-pass"
+    "🖥  SSH Connect|$SCRIPT_DIR/fz-ssh"
+    "📝  Notes|$SCRIPT_DIR/fz-notes"
+    "😀  Emoji Picker|$SCRIPT_DIR/fz-emoji"
+    "🔌  Power Menu|$SCRIPT_DIR/fz-power"
+)
+
+# dmenu0: NUL-separated input handles emojis/spaces safely
+selection=$(printf '%s\0' "${entries[@]}" | fuzzel --dmenu0 --prompt="󰮶 s1bgroup:~# " --lines=11 --placeholder="Command palette..." --auto-select 2>/dev/null)
+
+# If nothing selected, exit silently
+[ -z "$selection" ] && exit 0
+
+# Split "icon Label|command"
+command="${selection#*|}"
+
+# Dispatch: if it's an executable path, run it; otherwise evaluate as shell
+if [ -x "$command" ]; then
+    exec "$command"
+else
+    eval "$command"
+fi

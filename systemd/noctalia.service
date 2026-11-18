@@ -1,0 +1,20 @@
+[Unit]
+Description=Noctalia shell (bar, dock, notifications)
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/noctalia
+# soft limit: kernel throttles and reclaims, never kills
+MemoryHigh=4G
+# hard limit: only a true runaway dies... and auto-revives
+MemoryMax=8G
+MemorySwapMax=2G
+# self-heal: if it dies for any reason it comes back in 2s
+Restart=on-failure
+RestartSec=2
+# give up after 3 crashes in 60s (session teardown noise)
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Install]
+WantedBy=graphical-session.target

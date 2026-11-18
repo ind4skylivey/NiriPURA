@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# s1b-record-toggle — start/stop recording the focused monitor with gpu-screen-recorder.
+# AMD VAAPI h264 @60fps + default audio output (AAC, plays everywhere). Files: ~/Videos/Recordings/YYYY-MM-DD_HH-MM-SS.mp4
+set -u
+[ -n "${XDG_RUNTIME_DIR:-}" ] || { echo "XDG_RUNTIME_DIR not set" >&2; exit 1; }
+DIR="$HOME/Videos/Recordings"
+STATE="$XDG_RUNTIME_DIR/s1b-record.state"   # "<pid> <path>"
+LOG="$XDG_RUNTIME_DIR/s1b-record.log"
+ID=9971
+
+is_ours() { [ -n "${1:-}" ] && tr '\0' ' ' < "/proc/$1/cmdline" 2>/dev/null | grep -q "^gpu-screen-recorder "; }
+
+if [ -f "$STATE" ]; then
+    read -r pid path < "$STATE"
+    if is_ours "$pid"; then
+        kill -INT "$pid"
+        for _ in $(seq 50); do kill -0 "$pid" 2>/dev/null || break; sleep 0.1; done
+        rm -f "$STATE"
+        notify-send -r $ID -a "S1B REC" "󰻃 Recording saved" "$path"
+        exit 0
+    fi
+    rm -f "$STATE"
+fi
+
+mkdir -p "$DIR"
+out=$(niri msg -j focused-output 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin)["name"])' 2>/dev/null)
+out=${out:-DP-1}
+path="$DIR/$(date +%F_%H-%M-%S).mp4"
+setsid gpu-screen-recorder -w "$out" -f 60 -k h264 -q high -a default_output -ac aac -c mp4 -o "$path" >"$LOG" 2>&1 </dev/null &
+pid=$!
+sleep 0.8
+if kill -0 "$pid" 2>/dev/null; then
+    echo "$pid $path" > "$STATE"
+    notify-send -r $ID -a "S1B REC" "󰑊 Recording $out" "Mod+G to stop · $path"
+else
+    notify-send -r $ID -u critical -a "S1B REC" "Recording failed" "$(tail -n 2 "$LOG")"
+    exit 1
+fi

@@ -191,9 +191,9 @@ window-rule {
 }
 
 // --- Juegos: mejor estado al jugar (2026-10-11) ---
-// Juegos nativos/Unity eligen el "display 0" = el monitor en x=0,y=0 (DP-2 vertical),
-// asi que los mandamos al workspace "games" (vive en DP-1, 180Hz).
-// Sin opacidad/blur/esquinas/recorte para que niri pueda hacer direct scanout.
+// Native/Unity games pick "display 0" = the monitor at x=0,y=0 (vertical DP-2),
+// so we send them to the "games" workspace (lives on DP-1, 180Hz).
+// No opacity/blur/corners/clipping so niri can do direct scanout.
 window-rule {
     match app-id=r#"^valheim\.x86_64$"#
     match app-id=r#"^steam_app_[0-9]+$"#
@@ -230,7 +230,7 @@ window-rule {
 // Style pack
 // ============================================================
 
-// 1. Glass: apps oscuras translúcidas con blur
+// 1. Glass: dark translucent apps with blur
 window-rule {
     match app-id=r#"(?i)^org\.nicotine_plus\.Nicotine$"#
     match app-id=r#"(?i)^nicotine"#
@@ -252,7 +252,7 @@ window-rule {
     }
 }
 
-// 2a. Video: sólido, sin blur (direct scanout en fullscreen)
+// 2a. Video: solid, no blur (direct scanout in fullscreen)
 window-rule {
     match app-id=r#"(?i)^mpv$"#
     match app-id=r#"(?i)^stremio"#
@@ -264,7 +264,7 @@ window-rule {
     }
 }
 
-// 2b. Arte, audio y emuladores: sólido, colores fieles
+// 2b. Art, audio and emulators: solid, true colors
 window-rule {
     match app-id=r#"(?i)^krita$"#
     match app-id=r#"(?i)^gimp"#
@@ -324,7 +324,7 @@ window-rule {
     block-out-from "screen-capture"
 }
 
-// 5. Workspaces por app
+// 5. Workspaces per app
 window-rule {
     match app-id=r#"(?i)^slack$"#
     match app-id=r#"(?i)whatsapp"#
@@ -437,6 +437,7 @@ window-rule {
     match app-id=r#"(?i)^slack$"#
     match app-id=r#"(?i)whatsapp"#
     match app-id=r#"(?i)^spotify$"#
+    match app-id=r#"(?i)^rmpc$"#
     match app-id=r#"(?i)^(dev\.sfg\.)?orchard$"#
     match app-id=r#"(?i)^stremio"#
     match app-id=r#"(?i)nuvio"#
@@ -476,4 +477,43 @@ window-rule {
     match app-id=r#"(?i)^exodus$"#
     match app-id=r#"(?i)feather"#
     open-on-workspace " wm"
+}
+
+// ============================================================
+// S1B workflow 2026-11-18: kitty-here / kitty-scratch / rmpc-float
+// (distinct app-ids: the ^kitty$ -> term and ^rmpc$ -> chill rules don't match them)
+// ============================================================
+window-rule {
+    match app-id=r#"^(kitty-here|kitty-scratch|rmpc-float)$"#
+    background-effect {
+        blur false
+        xray true
+    }
+    opacity 0.97
+}
+window-rule {
+    match app-id=r#"^kitty-scratch$"#
+    open-floating true
+    open-focused true
+    default-column-width { fixed 1100; }
+    default-window-height { fixed 650; }
+    border {
+        on
+        width 2
+        active-gradient from="#d04dff" to="#ff2d78" angle=135
+        inactive-gradient from="#3a1a4a" to="#3a1a4a"
+    }
+}
+window-rule {
+    match app-id=r#"^rmpc-float$"#
+    open-floating true
+    open-focused true
+    default-column-width { fixed 1000; }
+    default-window-height { fixed 620; }
+    border {
+        on
+        width 2
+        active-gradient from="#00d4ff" to="#00d4ff"
+        inactive-gradient from="#0a3a48" to="#0a3a48"
+    }
 }

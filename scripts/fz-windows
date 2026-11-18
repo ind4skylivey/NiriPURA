@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════
+# fz-windows - Window switcher using fuzzel dmenu mode
+# Group: s1bgr0up.inc
+# Usage: fz-windows
+# Lists all windows from niri, fuzzy-search, focus selected
+# ═══════════════════════════════════════════════════════════════════════
+
+# Clean stale fuzzel lock (prevents "fuzzel already running" errors)
+rm -f /run/user/$(id -u)/fuzzel-wayland-1.lock 2>/dev/null
+
+# Parse niri windows output into "ID|Title (App)"
+windows=$(niri msg windows 2>/dev/null | awk '
+    /^Window ID/ { id=$3; gsub(/:/, "", id) }
+    /Title:/ { title=substr($0, index($0,$2)+1); gsub(/^"|"$/, "", title) }
+    /App ID:/ { app=substr($0, index($0,$3)+1); gsub(/^"|"$/, "", app) }
+    /^$/ { if (id != "") print id "|" title " (" app ")"; id=""; title=""; app="" }
+')
+
+# Exit if no windows
+[ -z "$windows" ] && exit 0
+
+# Show menu (labels only)
+selection=$(printf '%s\n' "$windows" | sed 's/^[0-9]*|//' | fuzzel --dmenu --prompt="🪟 s1bgroup:~# " --lines=12)
+
+# Exit if cancelled
+[ -z "$selection" ] && exit 0
+
+# Find the window ID matching the selection
+win_id=$(printf '%s\n' "$windows" | grep -F "|$selection" | cut -d'|' -f1)
+
+# Focus the window
+if [ -n "$win_id" ]; then
+    niri msg action focus-window "$win_id"
+fi
