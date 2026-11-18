@@ -39,24 +39,24 @@ layout {
     default-column-width { proportion 0.55; }
 
     // --- Theming & Focus Visualization ---
+    // Focus is shown by the border below; focus-ring stays off (no double outline).
     focus-ring {
         off
-        width 4
-        active-color   "#7fc8ff"
-        inactive-color "#505050"
     }
 
+    // S1B neon (2026-11-18). Base colors; the gradients live in modules/s1b-neon.kdl,
+    // included after noctalia.kdl so the theme can't override them.
     border {
         width 2
-        active-color   "#ffb59f" // Primary Coral
-        inactive-color "#1c110e"
-        urgent-color   "#ffb4ab"
+        active-color   "#ff2d78"
+        inactive-color "#1a0f1f"
+        urgent-color   "#00ff41"
     }
 
     tab-indicator {
-        active-color   "#ffb59f"
-        inactive-color "#b84622"
-        urgent-color   "#ffb4ab"
+        active-color   "#d04dff"
+        inactive-color "#3a1a4a"
+        urgent-color   "#00ff41"
     }
 
     insert-hint {
@@ -76,3 +76,10 @@ hotkey-overlay {
 // END OF FILE
 
 include "noctalia.kdl"
+
+// S1B neon border gradients; must come after noctalia.kdl (see file header).
+include "./modules/s1b-neon.kdl"
+
+// Managed by the Noctalia niri-animations plugin. Must be LAST so the
+// plugin can override the base animations from modules/animations.kdl.
+include "./animations.kdl"

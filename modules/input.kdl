@@ -20,6 +20,11 @@ input {
     }
 
     mouse {
+        accel-profile "flat"
+    }
+
+    trackball {
+        accel-profile "flat"
     }
 
     trackpoint {

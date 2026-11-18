@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════
+# fz-search - Web search with engine picker
+# Group: s1bgr0up.inc
+# Usage: fz-search
+# Pick an engine, type query, opens in zen-browser.
+# ═══════════════════════════════════════════════════════════════════════
+
+# Clean stale fuzzel lock
+rm -f /run/user/$(id -u)/fuzzel-wayland-1.lock 2>/dev/null
+
+BROWSER="${BROWSER:-zen-browser}"
+
+# Engines (label|url-template with %s placeholder)
+engines=$(cat <<'EOF'
+🔍  Google|https://www.google.com/search?q=%s
+🦆  DuckDuckGo|https://duckduckgo.com/?q=%s
+🐙  GitHub|https://github.com/search?q=%s&type=repositories
+▶️  YouTube|https://www.youtube.com/results?search_query=%s
+👽  Reddit|https://www.reddit.com/search/?q=%s
+📖  Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search=%s
+🛒  AUR|https://aur.archlinux.org/packages?K=%s
+🎮  Steam|https://store.steampowered.com/search/?term=%s
+🧠  Man pages|https://man.archlinux.org/search?q=%s
+EOF
+)
+
+engine=$(printf '%s\0' "$engines" | fuzzel --dmenu0 --prompt="🔎 s1bgroup:~# " --lines=9 --placeholder="Engine..." 2>/dev/null)
+[ -z "$engine" ] && exit 0
+
+template="${engine#*|}"
+
+# Ask for query
+query=$(fuzzel --dmenu --prompt="💬 s1bgroup:~# " --lines=0 --placeholder="Search query..." 2>/dev/null)
+[ -z "$query" ] && exit 0
+
+# URL-encode the query
+encoded=$(printf '%s' "$query" | sed 's/ /+/g; s/&/%26/g; s/?/%3F/g; s/=/\%3D/g; s/"/%22/g')
+
+url="${template//%s/$encoded}"
+exec "$BROWSER" "$url" >/dev/null 2>&1 &

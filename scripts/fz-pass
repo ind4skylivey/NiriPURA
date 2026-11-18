@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════
+# fz-pass - KeePassXC password search
+# Group: s1bgr0up.inc
+# Usage: fz-pass [database.kdbx]
+# Lists entries from a KeePassXC database, copies password on select.
+# ═══════════════════════════════════════════════════════════════════════
+
+# Clean stale fuzzel lock
+rm -f /run/user/$(id -u)/fuzzel-wayland-1.lock 2>/dev/null
+
+# Find database: argument, $KEEPASS_DB, or common locations
+DB="${1:-$KEEPASS_DB}"
+if [ -z "$DB" ]; then
+    for candidate in \
+        "$HOME/Documents/Passwords.kdbx" \
+        "$HOME/Passwords.kdbx" \
+        "$HOME/.local/share/keepassxc/Passwords.kdbx"; do
+        [ -f "$candidate" ] && DB="$candidate" && break
+    done
+fi
+
+if [ -z "$DB" ] || [ ! -f "$DB" ]; then
+    notify-send "fz-pass" "No KeePassXC database found. Set KEEPASS_DB or pass path as arg." -i dialog-error
+    exit 1
+fi
+
+# Check keepassxc-cli exists
+command -v keepassxc-cli >/dev/null 2>&1 || {
+    notify-send "fz-pass" "keepassxc-cli not installed" -i dialog-error
+    exit 1
+}
+
+# Prompt for master password (fuzzel --password mode)
+master=$(fuzzel --dmenu --prompt="🔑 Master key:" --lines=0 --password 2>/dev/null)
+[ -z "$master" ] && exit 0
+
+# Get entry list (title/path)
+entries=$(keepassxc-cli ls "$DB" --no-password -q <<<"$master" 2>/dev/null \
+    | grep -v '^$' | sed 's|^|🗝️  |')
+
+if [ -z "$entries" ]; then
+    notify-send "fz-pass" "Could not read database (wrong key?)" -i dialog-error
+    exit 1
+fi
+
+selection=$(printf '%s\n' "$entries" | fuzzel --dmenu --prompt="🗝  s1bgroup:~# " --lines=12 2>/dev/null)
+[ -z "$selection" ] && exit 0
+
+entry="${selection#🗝️  }"
+
+# Copy password
+pass=$(keepassxc-cli show "$DB" -a Password -q <<<"$master" "$entry" 2>/dev/null)
+if [ -n "$pass" ]; then
+    printf '%s' "$pass" | wl-copy --type text/plain
+    notify-send "fz-pass" "Password for '$entry' copied (clears in 15s)" -i security-high
+    # Auto-clear after 15s (background)
+    (sleep 15 && wl-copy --clear >/dev/null 2>&1) &
+else
+    notify-send "fz-pass" "Could not read password for '$entry'" -i dialog-error
+fi
